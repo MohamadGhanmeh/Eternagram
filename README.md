@@ -19,7 +19,8 @@ Core features to be implemented:
 <ul><li>Registering a user account</li>
 <li>Posting a picture</li>
 <li>Following a user</li>
-<li>Leave comments to a posted picture</li></ul>
+<li>Leave comments to a posted picture</li>
+<li>Implement Homepage</li></ul>
 
 Planed features:
 <ul><li>Delete comments</li>
