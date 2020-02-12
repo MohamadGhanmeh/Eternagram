@@ -7,6 +7,8 @@ import play.data.validation.Constraints;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import java.time.LocalDateTime;
 
 @Entity
 public class User extends Model {
@@ -18,24 +20,20 @@ public class User extends Model {
 	@Constraints.Required
 	private String userPassword;
 	@Constraints.Required
-	private String firstName;
-	@Constraints.Required
-	private String lastName;
-	@Constraints.Required
 	@Column(unique = true)
 	private String userEmail;
-	@Constraints.Required
-	@Column(unique = true)
 	private String phoneNumber;
+	@Constraints.Required
+	private LocalDateTime userDOB;
 
-	public User(long userId, @Constraints.Required String userName, @Constraints.Required String password, @Constraints.Required String firstName, @Constraints.Required String lastName, @Constraints.Required String email, @Constraints.Required String phoneNumber) {
+
+	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB) {
 		this.userId = userId;
 		this.userName = userName;
-		this.userPassword = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userEmail = email;
+		this.userPassword = userPassword;
+		this.userEmail = userEmail;
 		this.phoneNumber = phoneNumber;
+		this.userDOB = userDOB;
 	}
 
 	public static Finder<Long, User> find = new Finder<>(User.class);
@@ -48,14 +46,13 @@ public class User extends Model {
 	public void setUserName(String userName) {this.userName = userName;}
 	public String getUserPassword() {return userPassword;}
 	public void setUserPassword(String userPassword) {this.userPassword = userPassword;}
-	public String getFirstName() {return firstName;}
-	public void setFirstName(String firstName) {this.firstName = firstName;}
-	public String getLastName() {return lastName;}
-	public void setLastName(String lastName) {this.lastName = lastName;}
 	public String getUserEmail() {return userEmail;}
 	public void setUserEmail(String userEmail) {this.userEmail = userEmail;}
 	public String getPhoneNumber() {return phoneNumber;}
 	public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
+	public LocalDateTime getUserDOB() {return userDOB;}
+	public void setUserDOB(LocalDateTime userDOB) {this.userDOB = userDOB;}
+	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
 
 	public boolean logIn(String password) {return password.equals(this.userPassword);}
 }
