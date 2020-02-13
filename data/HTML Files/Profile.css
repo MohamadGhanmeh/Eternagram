@@ -277,3 +277,38 @@ img
 
 	}
 }
+
+.modal .modal-Border {
+	color: black;
+	max-width: 815px;
+	max-height: 600px;
+	position: relative;
+}
+
+.modal .modal-MainContainer {
+	height: 100%;
+	position: absolute;
+}
+
+.modal .modal-flexbox {
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+}
+
+.modal .modal-MainPicture {
+	width: 65%;
+}
+
+.modal .modal-CommentSection {
+	width: 35%;
+	display: flex;
+	flex-direction: column;
+}
+
+.modal .modal-PictureComments {
+	min-height: 100px;
+	background-color: darkcyan;
+	display: flex;
+}
+
