@@ -304,6 +304,10 @@ img
 	width: 35%;
 	display: flex;
 	flex-direction: column;
+	overflow-y: scroll;
+	height: 100%;
+	position: absolute;
+	right: 0%;
 }
 
 .modal .modal-PictureComments {
