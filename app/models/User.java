@@ -44,6 +44,7 @@ public class User extends Model {
 	public static Finder<Long, User> find = new Finder<>(User.class);
 	public static User findByUserName(String userName) {return find.query().where().eq("userName", userName).findOne();}
 	public static User findByEmail(String email) {return find.query().where().eq("userEmail", email).findOne();}
+	public static User findById(String userId) {return find.byId(parsers.StringParsers.parseLong(userId));}
 
 	public long getUserId() {return userId;}
 	public void setUserId(long userId) {this.userId = userId;}
