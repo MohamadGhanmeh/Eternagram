@@ -1,11 +1,10 @@
-@()(implicit request: play.mvc.Http.Request)
+@(user:User)(implicit request: play.mvc.Http.Request)
 
 @layouts.main("Profile") { }{
 	<header>
 		<div style="align-content: center">
-		<img src='@routes.Assets.at("images/Midoria.png")' class="profile-image circle-left" alt="...">
+		<img src='@routes.Assets.at("images/Midoria.png")' class="profile-image circle" alt="...">
 		This is a test
-		<img src='@routes.Assets.at("images/Midoria.png")' class="profile-image circle-left flip" alt="...">
 		</div>
 	</header>
 }
