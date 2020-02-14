@@ -1,0 +1,12 @@
+@(user:User)(implicit request: play.mvc.Http.Request)
+
+@layouts.main("Users") { }{
+	@for(map <- MappingController.mapUser()) {
+		@if(map._2.getUserId != user.getUserId) {
+			<div class="row">
+				<img class="list-user-picture circle" src="@map._2.getProfilePicture" alt="No Profile Picture">
+				<a href='@routes.ViewsController.userProfile(map._2.getUserName, map._2.getUserId)' class="btn list-user-info btn-outline-primary">@map._1 &nbsp;&nbsp; <i class="fas fa-images"></i> @map._2.getPictureAmount &nbsp;&nbsp; <i class="fas fa-users"></i> @map._2.getFollowerAmount</a>
+			</div>
+		}
+	}
+}
