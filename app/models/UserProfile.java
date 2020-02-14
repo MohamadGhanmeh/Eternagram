@@ -16,6 +16,7 @@ public class UserProfile extends Model {
     private String lastName;
     private int userGender;
     private String userBio;
+    private String userProfilePicture;
     private String urlFacebook;
     private String urlLinkedin;
     private String urlYoutube;
@@ -49,6 +50,8 @@ public class UserProfile extends Model {
     public void setUserGender(int userGender) {this.userGender = userGender;}
     public String getUserBio() {return userBio;}
     public void setUserBio(String userBio) {this.userBio = userBio;}
+    public String getUserProfilePicture() {return userProfilePicture;}
+    public void setUserProfilePicture(String userProfilePicture) {this.userProfilePicture = userProfilePicture;}
     public String getUrlFacebook() {return urlFacebook;}
     public void setUrlFacebook(String urlFacebook) {this.urlFacebook = urlFacebook;}
     public String getUrlLinkedin() {return urlLinkedin;}

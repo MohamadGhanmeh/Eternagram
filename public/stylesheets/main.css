@@ -5,7 +5,7 @@ body {
 	color: #fff;
 	background-color: #131419 !important;
 }
-body.center {
+.center {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -23,3 +23,11 @@ img.profile-image {
 	object-fit: cover;
 }
 img.flip {transform: scaleX(-1);}
+.list-user-picture {
+	width: calc(33.33% - 1rem);
+	object-fit: cover;
+}
+.list-user-info {
+	width: calc(66.66% - 2rem);
+	object-fit: cover;
+}

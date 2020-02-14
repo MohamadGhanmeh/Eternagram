@@ -17,6 +17,8 @@ create table user (
   user_email                    varchar(255),
   phone_number                  varchar(255),
   user_dob                      timestamp,
+  picture_amount                bigint,
+  follower_amount               bigint,
   constraint uq_user_user_name unique (user_name),
   constraint uq_user_user_email unique (user_email),
   constraint pk_user primary key (user_id)
@@ -28,6 +30,7 @@ create table user_profile (
   last_name                     varchar(255),
   user_gender                   integer not null,
   user_bio                      varchar(255),
+  user_profile_picture          varchar(255),
   url_facebook                  varchar(255),
   url_linkedin                  varchar(255),
   url_youtube                   varchar(255),

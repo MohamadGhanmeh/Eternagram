@@ -1,8 +1,10 @@
 package models;
 
+import controllers.ReverseAssets;
 import io.ebean.Finder;
 import io.ebean.Model;
 import play.data.validation.Constraints;
+import router.Routes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,15 +27,18 @@ public class User extends Model {
 	private String phoneNumber;
 	@Constraints.Required
 	private LocalDateTime userDOB;
+	private Long pictureAmount;
+	private Long followerAmount;
 
-
-	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB) {
+	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userPassword = userPassword;
 		this.userEmail = userEmail;
 		this.phoneNumber = phoneNumber;
 		this.userDOB = userDOB;
+		this.pictureAmount = pictureAmount;
+		this.followerAmount = followerAmount;
 	}
 
 	public static Finder<Long, User> find = new Finder<>(User.class);
@@ -52,7 +57,16 @@ public class User extends Model {
 	public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
 	public LocalDateTime getUserDOB() {return userDOB;}
 	public void setUserDOB(LocalDateTime userDOB) {this.userDOB = userDOB;}
-	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
+	public Long getPictureAmount() {return pictureAmount;}
+	public void setPictureAmount(Long pictureAmount) {this.pictureAmount = pictureAmount;}
+	public Long getFollowerAmount() {return followerAmount;}
+	public void setFollowerAmount(Long followerAmount) {this.followerAmount = followerAmount;}
 
+	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
 	public boolean logIn(String password) {return password.equals(this.userPassword);}
+	public String getProfilePicture(){
+		UserProfile userProfile = getUserProfile();
+		if ((userProfile == null) || (userProfile.getUserProfilePicture() == null)) return "Address to default picture";
+		return userProfile.getUserProfilePicture();
+	}
 }
