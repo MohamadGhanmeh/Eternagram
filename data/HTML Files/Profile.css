@@ -305,9 +305,19 @@ img
 	display: flex;
 	flex-direction: column;
 	overflow-y: scroll;
-	height: 100%;
+	height: 85%;
 	position: absolute;
 	right: 0%;
+}
+
+.modal .modal-CommentUpload {
+	width: 35%;
+	height: 15%;
+	position: absolute;
+	bottom: 0%;
+	right: 0%;
+	background-color: gold;
+	display: flex;
 }
 
 .modal .modal-PictureComments {
@@ -315,4 +325,3 @@ img
 	background-color: darkcyan;
 	display: flex;
 }
-
