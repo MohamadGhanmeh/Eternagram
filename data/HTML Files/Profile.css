@@ -345,3 +345,51 @@ img
 		}
 	}
 }
+
+.modal .modal-Border {
+	color: black;
+	max-width: 815px;
+	max-height: 600px;
+	position: relative;
+}
+
+.modal .modal-MainContainer {
+	height: 100%;
+	position: absolute;
+}
+
+.modal .modal-flexbox {
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+}
+
+.modal .modal-MainPicture {
+	width: 65%;
+}
+
+.modal .modal-CommentSection {
+	width: 35%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	height: 85%;
+	position: absolute;
+	right: 0%;
+}
+
+.modal .modal-CommentUpload {
+	width: 35%;
+	height: 15%;
+	position: absolute;
+	bottom: 0%;
+	right: 0%;
+	background-color: gold;
+	display: flex;
+}
+
+.modal .modal-PictureComments {
+	min-height: 100px;
+	background-color: darkcyan;
+	display: flex;
+}
