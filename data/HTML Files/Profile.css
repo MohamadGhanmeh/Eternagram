@@ -21,6 +21,11 @@ img
 {
 	display: block;
 }
+.unpadded
+{
+	padding: 0;
+}
+
 .comment-picture-profile
 {
 	border-radius: 50%;
@@ -34,14 +39,14 @@ img
 	margin: 0 auto;
 	padding: 0 2rem;
 }
-.btn
+.buttonCenter-red
 {
-	all: unset;
-	background: none;
-	color: none;
-	display: inline-block;
-	cursor: pointer;
-	border: none;
+	vertical-align: text-bottom !important;
+}
+.buttonCenter-grey
+{
+	vertical-align: text-bottom !important;
+	color: gray !important;
 }
 .btn:focus
 {
@@ -81,11 +86,12 @@ img
 	border-radius: 50%;
 	width: 225px;
 	height: 225px;
+	object-fit: cover;
 }
-.profile-user-setting, .profile-stats, .profile-bio
+.profile-user-settings, .profile-stats, .profile-bio
 {
 	float: left;
-
+	width: calc(66.666% - 2rem);
 }
 .profile-user-settings
 {
@@ -233,6 +239,7 @@ img
 	.profile-image img
 	{
 		width: 7.7rem;
+		height: 7.7rem;
 	}
 	.profile-user-settings
 	{
@@ -252,9 +259,45 @@ img
 		text-align: center;
 		margin-top: 1rem;
 	}
+	.profile-bio
+	{
+		font-size: 1.4rem;
+		margin-top: 1.5rem;
+	}
+	.profile-edit-btn, .profile-bio, .profile-stats
+	{
+		flex-basis: 100%;
+	}
+	.profile-stats
+	{
+		order: 1;
+		margin-top: 1.5rem;
+	}
+	.profile-stats ul
+	{
+		display: flex;
+		text-align: center;
+		padding: 1.2rem 0;
+		border-top: 0.1rem solid #dadada;
+		border-bottom: 0.1rem solid #dadada;
+	}
+	.profile-stats li
+	{
+		font-size: 1.0rem;
+		flex: 1;
+		margin: 0;
+	}
+	.profile-stats-count
+	{
+		display: block;
+	}
 }
 
-
+@keyframes loader {
+	to{
+		transform: rotate(360deg);
+	}
+}
 
 @supports (display: grid)
 {
@@ -270,10 +313,35 @@ img
 	{
 		grid-row: 1 / -1;
 	}
-	.profile-image, .profile-user-settings, .profile-bio, .profile-item, .gallery
+	.profile-image, .profile-user-settings, .profile-stats, .profile-bio, .profile-item, .gallery
 	{
 		width: auto;
 		margin: 0;
-
+	}
+	
+	@media (max-width: 40rem) {
+		.profile
+		{
+			grid-template-columns: auto 1fr;
+			grid-row-gap: 1.5rem;
+		}
+		.profile-image
+		{
+			grid-row: 1 / 2;
+		}
+		.profile-user-settings
+		{
+			display: grid;
+			grid-template-columns: auto 1fr;
+			grid-gap: 1rem;
+		}
+		.profile-edit-btn, .profile-bio, .profile-stats
+		{
+			grid-column: 1 / -1;
+		}
+		.profile-user-settings, .profile-edit-btn, .profile-settings-btn, .profile-bio, .profile-stats
+		{
+			margin: 0;
+		}
 	}
 }
