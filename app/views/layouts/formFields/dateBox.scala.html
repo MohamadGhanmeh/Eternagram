@@ -1,0 +1,7 @@
+@(name: String, label: String, placeHolder: String, form: Form.Field, value: String = null, isRequired: Boolean = false, breakPoint: String = null)
+<div class='form-group mt-2 @if(breakPoint!=null) {@breakPoint}' id='@{name + "Holder"}'>
+	<label for='@name' class="form-label">@label</label>
+	<input type="text" id='@name' name='@name' class="form-control form-input @if(form.hasErrors) {border-danger}" placeholder='@if(placeHolder!=null) {@placeHolder}' value='@if(value!=null) {@value} else {@form.value.orElse("")}' @if(isRequired){required}>
+	@for(error: play.data.validation.ValidationError <- form.errors){<span class="text-danger">@error.message</span>}
+</div>
+<script>$(function() {var $datePicker =$("#@name");var dateValue = $datePicker.val();$datePicker.datepicker();$datePicker.datepicker("option", "dateFormat", "yy-mm-dd");$datePicker.val(dateValue)});</script>
