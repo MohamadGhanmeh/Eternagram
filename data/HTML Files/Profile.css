@@ -81,7 +81,6 @@ img
 	border-radius: 50%;
 	width: 225px;
 	height: 225px;
-	object-fit: cover;
 }
 .profile-user-setting, .profile-stats, .profile-bio
 {
