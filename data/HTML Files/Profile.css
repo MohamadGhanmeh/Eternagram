@@ -86,7 +86,7 @@ img
 .profile-user-setting, .profile-stats, .profile-bio
 {
 	float: left;
-	width: calc(66.666% - 2rem);
+
 }
 .profile-user-settings
 {
@@ -148,6 +148,7 @@ img
 	flex-wrap: wrap;
 	margin: -1rem -1rem;
 	padding-bottom: 3rem;
+
 }
 .gallery-item
 {
