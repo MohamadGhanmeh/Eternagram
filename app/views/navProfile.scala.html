@@ -1,10 +1,31 @@
-@(user:User)(implicit request: play.mvc.Http.Request)
-
-@layouts.main("Profile") { }{
-	<header>
-		<div style="align-content: center">
-		<img src='@routes.Assets.at("images/Midoria.png")' class="profile-image circle" alt="...">
-		This is a test
-		</div>
-	</header>
+@(user: User, profile: UserProfile)(implicit request: play.mvc.Http.Request)
+@if(profile == null){
+    @layouts.main("Profile") { }{<div class="alert alert-danger" role="alert">An error has occurred, please try again.</div>}
+} else {
+    @layouts.main("Profile") { }{
+        <header>
+            <div class="container">
+                <div class="profile">
+                    <div class="profile-image">
+                        <img src='@routes.Assets.at("images/ETLogo.png")' alt="User">
+                    </div>
+                    <div class="profile-user-settings">
+                        <h1 class="profile-user-name">@user.getUserName</h1>
+                    </div>
+                    <div class="profile-stats">
+                        <ul>
+                            <li><span class="profile-stats-count">@user.getPictureAmount</span> posts</li>
+                            <li><span class="profile-stats-count">@user.getFollowerAmount</span> followers</li>
+                        </ul>
+                    </div>
+                    <div class="profile-bio">
+                        <p><span class="profile-real-name">@if(profile.getFirstName != null && profile.getLastName !=null){user.getUserProfile.getfirstName user.getUserProfile.getlastName}</span>
+                            @if(profile.getUserBio == null){@user.getUserName is too lazy to have bio} else { @profile.getUserBio}</p>
+                    </div>
+                </div>
+                    <!--  END OF PROFILE SETTINGS   -->
+            </div>
+                <!--  END OF CONTAINER  -->
+        </header>
+    }
 }

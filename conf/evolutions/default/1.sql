@@ -36,24 +36,29 @@ create table user_profile (
   last_name                     varchar(255),
   user_gender                   integer not null,
   user_bio                      varchar(255),
-  user_profile_picture          varchar(255),
+  user_profile_picture_picture_id varchar(255),
   url_facebook                  varchar(255),
   url_linkedin                  varchar(255),
   url_youtube                   varchar(255),
   url_twitch                    varchar(255),
   url_twitter                   varchar(255),
   url_personal                  varchar(255),
+  constraint uq_user_profile_user_profile_picture_picture_id unique (user_profile_picture_picture_id),
   constraint pk_user_profile primary key (profile_id)
 );
 
 create index ix_picture_picture_owner_user_id on picture (picture_owner_user_id);
 alter table picture add constraint fk_picture_picture_owner_user_id foreign key (picture_owner_user_id) references user (user_id) on delete restrict on update restrict;
 
+alter table user_profile add constraint fk_user_profile_user_profile_picture_picture_id foreign key (user_profile_picture_picture_id) references picture (picture_id) on delete restrict on update restrict;
+
 
 # --- !Downs
 
 alter table picture drop constraint if exists fk_picture_picture_owner_user_id;
 drop index if exists ix_picture_picture_owner_user_id;
+
+alter table user_profile drop constraint if exists fk_user_profile_user_profile_picture_picture_id;
 
 drop table if exists follows;
 

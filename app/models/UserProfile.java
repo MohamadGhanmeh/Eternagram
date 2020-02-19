@@ -16,7 +16,8 @@ public class UserProfile extends Model {
     private String lastName;
     private int userGender;
     private String userBio;
-    private String userProfilePicture;
+    @OneToOne
+    private Picture userProfilePicture;
     private String urlFacebook;
     private String urlLinkedin;
     private String urlYoutube;
@@ -24,18 +25,23 @@ public class UserProfile extends Model {
     private String urlTwitter;
     private String urlPersonal;
 
-    public UserProfile(User profileOwner, String firstName, String lastName, int userGender, String userBio, String urlFacebook, String urlLinkedin, String urlYoutube, String urlTwitch, String urlTwitter, String urlPersonal) {
+    public UserProfile(User profileOwner, String firstName, String lastName, int userGender, String userBio, Picture userProfilePicture, String urlFacebook, String urlLinkedin, String urlYoutube, String urlTwitch, String urlTwitter, String urlPersonal) {
         this.profileId = profileOwner.getUserId();
         this.firstName = firstName;
         this.lastName = lastName;
         this.userGender = userGender;
         this.userBio = userBio;
+        this.userProfilePicture = userProfilePicture;
         this.urlFacebook = urlFacebook;
         this.urlLinkedin = urlLinkedin;
         this.urlYoutube = urlYoutube;
         this.urlTwitch = urlTwitch;
         this.urlTwitter = urlTwitter;
         this.urlPersonal = urlPersonal;
+    }
+
+    public UserProfile(User profileOwner) {
+        this.profileId = profileOwner.getUserId();
     }
 
     public static Finder<Long, UserProfile> find = new Finder<>(UserProfile.class);
@@ -50,8 +56,8 @@ public class UserProfile extends Model {
     public void setUserGender(int userGender) {this.userGender = userGender;}
     public String getUserBio() {return userBio;}
     public void setUserBio(String userBio) {this.userBio = userBio;}
-    public String getUserProfilePicture() {return userProfilePicture;}
-    public void setUserProfilePicture(String userProfilePicture) {this.userProfilePicture = userProfilePicture;}
+    public Picture getUserProfilePicture() {return userProfilePicture;}
+    public void setUserProfilePicture(Picture userProfilePicture) {this.userProfilePicture = userProfilePicture;}
     public String getUrlFacebook() {return urlFacebook;}
     public void setUrlFacebook(String urlFacebook) {this.urlFacebook = urlFacebook;}
     public String getUrlLinkedin() {return urlLinkedin;}

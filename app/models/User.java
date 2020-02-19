@@ -67,6 +67,6 @@ public class User extends Model {
 	public String getProfilePicture(){
 		UserProfile userProfile = getUserProfile();
 		if ((userProfile == null) || (userProfile.getUserProfilePicture() == null)) return "Address to default picture";
-		return userProfile.getUserProfilePicture();
+		return userProfile.getUserProfilePicture().toString();
 	}
 }
