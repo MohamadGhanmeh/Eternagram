@@ -8,6 +8,7 @@ POST    /login                      controllers.UserController.logIn(request:Req
 GET     /logout                     controllers.UserController.logOut(request:Request)
 POST    /newUser                    controllers.UserController.newUserAction(request:Request)
 GET     /profile/:userName/:userId  controllers.ViewsController.userProfile(request:Request, userName:String, userId:Long)
+GET     /profile/                   controllers.ViewsController.userSelfProfile(request:Request)
 GET     /listUsers                  controllers.ViewsController.userList(request:Request)
 
 GET     /picture/view/:pictureId    controllers.PictureController.viewPicturePage(request:Request, pictureId:String)

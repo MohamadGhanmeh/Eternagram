@@ -5,4 +5,4 @@
 	@for(error: play.data.validation.ValidationError <- form.errors){<span class="text-danger">@error.message</span>}
 	<fieldset class="collapse"><input type="file" id='@name' name='@name' value='@form.value.orElse("")' @if(isRequired){required} @if(accepting!=null){accept='@accepting'}></fieldset>
 </div>
-<script>$(function() {var $filePicker =$('#@name');var $fileText =$('#text_@name');$filePicker.on("change", function (e) {var fileName ="";if( e.target.value ) fileName = e.target.value.split( '\\' ).pop();if(fileName) $fileText.html(fileName);else $fileText.val("");});$filePicker.change();});</script>
+<script>$(function() {let $filePicker =$('#@name');let $fileText =$('#text_@name');$filePicker.on("change", function (e) {let fileName ="";if( e.target.value ) fileName = e.target.value.split( '\\' ).pop();if(fileName) $fileText.html(fileName);else $fileText.val("");});$filePicker.change();});</script>

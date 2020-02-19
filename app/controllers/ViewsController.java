@@ -28,11 +28,16 @@ public class ViewsController extends Controller {
 			DynamicForm form = formFactory.form();
 			return ok(views.html.startPage.render(form, false, request));
 		}
-		return ok(views.html.index.render(request));
+		return ok(views.html.navHome.render(user, request));
 	}
 	public Result userList(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
 		return ok(views.html.navUsers.render(user, request));
+	}
+	public Result userSelfProfile(Request request) {
+		User user = User.findById(request.session().get("user").orElse("0"));
+		if (user == null) return redirect(routes.ViewsController.index());
+		return redirect(routes.ViewsController.userProfile(user.getUserName(), user.getUserId()));
 	}
 	public Result userProfile(Request request, String userName, Long userId){
 		User user = User.find.byId(userId);

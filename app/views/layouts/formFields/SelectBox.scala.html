@@ -1,0 +1,7 @@
+@(name: String, label: String, options: java.util.Map[String, Object], form: Form.Field, default: String, classes: String = null)
+<div class='form-group mt-2 @if(classes!=null) {@classes}' id='@{name + "Holder"}'>
+	<label for='@name' class="form-label">@label</label>
+	<select id='@name' name='@name' class="form-control @if(form.hasErrors) {border-danger}">
+	@for(option: (String, Object) <- options) {<option value='@option._2.toString' @if(form.value.orElse(default).equals(option._2.toString)) {selected}>@option._1 </option>}
+	</select>@for(error: play.data.validation.ValidationError <- form.errors){<span class="text-danger">@error.message</span>}
+</div>

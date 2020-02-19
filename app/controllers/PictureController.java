@@ -13,6 +13,7 @@ import play.mvc.Http.Request;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.File;
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
  * @author TBA
  * @version 1.0
  */
+@Singleton
 public class PictureController extends Controller {
 	private final Environment environment;
 	private FormFactory formFactory;

@@ -1,0 +1,6 @@
+@(name: String, label: String, rows:Int, maxLength: Int, form: Form.Field, isRequired: Boolean = false, classes: String = null)
+<div class='form-group mt-2 @if(classes!=null) {@classes}' id='@{name + "Holder"}'>
+	<label for='@name' class="form-label">@label</label>
+	<textarea class='form-control form-input @if(form.hasErrors) {border-danger}' id='@name' name='@name' rows='@rows' maxlength='@maxLength' @if(isRequired){required}>@form.value.orElse("")</textarea>
+	@for(error: play.data.validation.ValidationError <- form.errors){<span class="text-danger">@error.message</span>}
+</div>

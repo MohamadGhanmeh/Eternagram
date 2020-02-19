@@ -17,33 +17,6 @@
 	text-transform: uppercase;
 	letter-spacing: 4px;
 }
-.form-label {
-	display: block;
-	color: #868686;
-	margin-bottom: 5px;
-	font-size: 18px;
-}
-.form-input, .form-button {
-	width: 100%;
-	height: 50px;
-	background: #131419;
-	border: none;
-	outline: none;
-	border-radius: 40px;
-	padding: 5px 15px;
-	font-size: 18px;
-	color: #03a9f4;
-	box-shadow: inset -2px -2px 6px rgba(255,255,255,0.1), inset 2px 2px 6px rgba(0,0,0,0.8);
-}
-.form-button {box-shadow: -2px -2px 6px rgba(255,255,255,0.1), 2px 2px 6px rgba(0,0,0,0.8);}
-.form-button:active {
-	color: #006c9c;
-	box-shadow: -2px -2px 6px rgba(255,255,255,0.1), 2px 2px 6px rgba(0,0,0,0.8);
-}
-.form-input::placeholder {
-	color: #555;
-	font-size: 18px;
-}
 .forget {
 	margin-top: 30px;
 	color: #555;

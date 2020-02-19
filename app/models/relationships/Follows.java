@@ -7,6 +7,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -15,10 +16,10 @@ public class Follows extends Model {
     @Id
     String followsId;
     @Constraints.Required
-    @OneToMany
+    @ManyToOne
     private User follower;
     @Constraints.Required
-    @OneToMany
+    @ManyToOne
     private User followee;
     private String note;
     public static Finder<String, Follows> find = new Finder<>(Follows.class);

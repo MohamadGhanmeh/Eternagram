@@ -5,6 +5,8 @@
 
 create table follows (
   follows_id                    varchar(255) not null,
+  follower_user_id              bigint,
+  followee_user_id              bigint,
   note                          varchar(255),
   constraint pk_follows primary key (follows_id)
 );
@@ -50,6 +52,12 @@ create table user_profile (
   constraint pk_user_profile primary key (profile_id)
 );
 
+create index ix_follows_follower_user_id on follows (follower_user_id);
+alter table follows add constraint fk_follows_follower_user_id foreign key (follower_user_id) references user (user_id) on delete restrict on update restrict;
+
+create index ix_follows_followee_user_id on follows (followee_user_id);
+alter table follows add constraint fk_follows_followee_user_id foreign key (followee_user_id) references user (user_id) on delete restrict on update restrict;
+
 create index ix_picture_picture_owner_user_id on picture (picture_owner_user_id);
 alter table picture add constraint fk_picture_picture_owner_user_id foreign key (picture_owner_user_id) references user (user_id) on delete restrict on update restrict;
 
@@ -57,6 +65,12 @@ alter table user_profile add constraint fk_user_profile_user_profile_picture_pic
 
 
 # --- !Downs
+
+alter table follows drop constraint if exists fk_follows_follower_user_id;
+drop index if exists ix_follows_follower_user_id;
+
+alter table follows drop constraint if exists fk_follows_followee_user_id;
+drop index if exists ix_follows_followee_user_id;
 
 alter table picture drop constraint if exists fk_picture_picture_owner_user_id;
 drop index if exists ix_picture_picture_owner_user_id;
