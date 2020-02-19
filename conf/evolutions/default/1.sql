@@ -3,6 +3,12 @@
 
 # --- !Ups
 
+create table follows (
+  follows_id                    varchar(255) not null,
+  note                          varchar(255),
+  constraint pk_follows primary key (follows_id)
+);
+
 create table picture (
   picture_id                    varchar(255) not null,
   location                      varchar(255),
@@ -48,6 +54,8 @@ alter table picture add constraint fk_picture_picture_owner_user_id foreign key 
 
 alter table picture drop constraint if exists fk_picture_picture_owner_user_id;
 drop index if exists ix_picture_picture_owner_user_id;
+
+drop table if exists follows;
 
 drop table if exists picture;
 

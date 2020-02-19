@@ -36,10 +36,10 @@
 			<h2 class="form-title">Login</h2>
 			<fieldset hidden>@helper.CSRF.formField</fieldset>
 			<fieldset class="text-left">
-				@layouts.formFields.textBox("userEmail", "Email", "example@xyz.com", form("userEmail"), null, true)
-				@layouts.formFields.passwordBox("userPassword", "Password", "Password123", form("userPassword"), null, true)
+				@layouts.formFields.textBox("userEmail", "Email", "example@xyz.com", form("userEmail"), true)
+				@layouts.formFields.passwordBox("userPassword", "Password", "Password123", form("userPassword"), true)
 				<input type="submit" class="form-button mt-4" id="signInSubmit" value="Sign In">
-				<button class="form-button mt-4" type="button" id="registrationButton" aria-controls="registrationForm" aria-expanded="false" aria-label="Switch to Create an account">Create Account</button>
+				<button class="form-button mt-4" type="button" id="registrationButton" aria-controls="registrationForm" aria-expanded="false" aria-label="Switch to Create an account">Create Account Instead</button>
 			</fieldset>
 			<p class="forget">Forgot Password ? <a href="#">Click Here</a></p>
 		</form>
@@ -48,13 +48,13 @@
 			<h2 class="form-title">Create your Eternagram account</h2>
 			<fieldset hidden>@helper.CSRF.formField</fieldset>
 			<fieldset class="text-left">
-				@layouts.formFields.textBox("userEmail", "Email", "example@xyz.com", form("userEmail"), null, true)
-				@layouts.formFields.textBox("userName", "Username", "EternagramUser", form("userName"), null, true)
-				@layouts.formFields.textBox("userPassword", "Password", "Password123", form("userPassword"), null, true)
+				@layouts.formFields.textBox("userEmail", "Email", "example@xyz.com", form("userEmail"), true)
+				@layouts.formFields.textBox("userName", "Username", "EternagramUser", form("userName"), true)
+				@layouts.formFields.textBox("userPassword", "Password", "Password123", form("userPassword"), true)
 				@layouts.formFields.textBox("phoneNumber", "Phone Number (optional)", "(619) 619-6969", form("phoneNumber"))
-				@layouts.formFields.dateBox("userDOB", "Date of Birth", "1900-10-20", form("userDOB"), null, true)
+				@layouts.formFields.dateBox("userDOB", "Date of Birth", "1900-10-20", form("userDOB"), true)
 				<input type="submit" class="form-button mt-4" id="registrationSubmit" value="Create Account">
-				<button class="form-button mt-4" type="button" id="signInButton" aria-controls="signInForm" aria-expanded="false" aria-label="Switch to Signing In">Sign In</button>
+				<button class="form-button mt-4" type="button" id="signInButton" aria-controls="signInForm" aria-expanded="false" aria-label="Switch to Signing In">Sign In Instead</button>
 			</fieldset>
 		</form>
 		</div>

@@ -1,11 +1,17 @@
 package controllers;
 
 import models.User;
+import models.relationships.Follows;
+import play.mvc.Http.Request;
+
+import models.User;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.data.FormFactory;
 import play.data.validation.ValidationError;
 import play.mvc.Controller;
+import play.mvc.Result;
+
 import play.mvc.Http.Request;
 import play.mvc.Result;
 
@@ -22,6 +28,30 @@ import java.util.TreeMap;
  */
 @Singleton
 public class UserController extends Controller {
+
+
+    public Result followUser(Long userId, Request request){
+        User userToFollow = User.find.byId(userId);
+        User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
+
+        if(userThatFollows == null){
+            return redirect(routes.ViewsController.index()).flashing("error","There was a problem.");
+        }
+
+        if (userToFollow == null ){
+            return redirect(routes.ViewsController.index()).flashing("error","There was a problem trying to follow that user");
+        }
+        if( Follows.find.byId(userThatFollows.getUserId() + "," + userToFollow.getUserId()) == null){
+            return redirect(routes.ViewsController.index()).flashing("error","you are already following user");
+        }
+
+        Follows toCreate = new Follows(userThatFollows, userToFollow,"");
+        toCreate.save();
+        return redirect(routes.ViewsController.userProfile( userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are now following user" + userToFollow.getUserName());
+
+    }
+
+
     private final FormFactory formFactory;
     @Inject
     public UserController(FormFactory formFactory) {this.formFactory = formFactory;}
