@@ -11,8 +11,11 @@ create table follows (
 
 create table picture (
   picture_id                    varchar(255) not null,
-  location                      varchar(255),
+  upload_time                   timestamp,
+  picture_location              varchar(255),
+  picture_caption               varchar(255),
   picture_owner_user_id         bigint,
+  file_extension                varchar(255),
   constraint pk_picture primary key (picture_id)
 );
 

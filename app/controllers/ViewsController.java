@@ -23,8 +23,7 @@ public class ViewsController extends Controller {
 	public ViewsController(FormFactory formFactory) {this.formFactory = formFactory;}
 
 	public Result index(Request request) {
-		Long userId = parsers.StringParsers.parseLong(request.session().get("user").orElse("0"));
-		User user = User.find.byId(userId);
+		User user = User.findById(request.session().get("user").orElse("0"));
 		if (user == null) {
 			DynamicForm form = formFactory.form();
 			return ok(views.html.startPage.render(form, false, request));
@@ -32,7 +31,7 @@ public class ViewsController extends Controller {
 		return ok(views.html.index.render(request));
 	}
 	public Result userList(Request request) {
-		User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
+		User user = User.findById(request.session().get("user").orElse("0"));
 		return ok(views.html.navUsers.render(user, request));
 	}
 	public Result userProfile(Request request, String userName, Long userId){
