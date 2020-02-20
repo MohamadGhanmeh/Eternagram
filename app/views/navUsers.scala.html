@@ -1,4 +1,4 @@
-@(user:User)(implicit request: play.mvc.Http.Request)
+@()(implicit request: play.mvc.Http.Request, user:User)
 
 @layouts.main("Users") { }{
 	@for(map <- MappingController.mapUser()) {
