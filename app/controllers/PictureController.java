@@ -1,6 +1,7 @@
 package controllers;
 
 import formatters.DateTimeFormats;
+import formatters.Scalr;
 import models.Picture;
 import models.User;
 import play.Environment;
@@ -12,10 +13,13 @@ import play.mvc.Http;
 import play.mvc.Http.Request;
 import play.mvc.Result;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Handle actions related to pictures (posting, commenting, deleting, etc).
@@ -47,6 +51,7 @@ public class PictureController extends Controller {
 		if ((toCheck == null) || toCheck.trim().equals("")) return false;
 		return (toCheck.length() <= 50);
 	}
+	private String getPictureLocation(Picture picture){ return fileDirectory + "/" + picture.getPictureOwner().getUserId();}
 
 	public Result newPicturePage(Request request){
 		return ok();
@@ -58,9 +63,7 @@ public class PictureController extends Controller {
 
 		if (!isCaptionValid(pictureCaption)) return badRequest();
 		if (pictureOwner == null) return badRequest();
-		Picture newPicture = new Picture();
-		newPicture.setPictureOwner(pictureOwner);
-		newPicture.setPictureId(pictureOwner.getUserId() + "-" + newPicture.getUploadTime().format(DateTimeFormats.ID));
+		Picture newPicture = new Picture(pictureOwner);
 		newPicture.setPictureCaption(pictureCaption);
 
 		Http.MultipartFormData<Files.TemporaryFile> body = request.body().asMultipartFormData();
@@ -74,17 +77,40 @@ public class PictureController extends Controller {
 			File directory = new File(fileAddress);
 			if (!directory.exists()) {directory.mkdir();}
 			// Open the file to upload into
-			newPicture.setPictureLocation(fileAddress);
 			newPicture.save();
-			fileAddress = newPicture.getPictureLocation() + newPicture.getPictureId() + newPicture.getFileExtension();
+			newPicture.refresh();
+			fileAddress = getPictureLocation(newPicture) + "/" + newPicture.getPictureId() + newPicture.getFileExtension();
 			directory = new File(fileAddress);
 			file.copyTo(directory, true);
+			newPictureThumbnail(newPicture);
 			return redirect(routes.PictureController.viewPicturePage(newPicture.getPictureId()));
 		} else {
 			return badRequest().flashing("error", "Missing file");
 		}
 	}
+	public void newPictureThumbnail(Picture uploadedPicture) {
+		String fileExtension = uploadedPicture.getFileExtension();
+		String pictureId = uploadedPicture.getPictureId();
+		String fileAddress = getPictureLocation(uploadedPicture);
+		String thumbnailAddress = fileAddress + "/" + pictureId + "_thumbnail" + fileExtension;
+		try {
+			BufferedImage picture = ImageIO.read(new File(fileAddress + pictureId + fileExtension));
+			BufferedImage scaledImg = Scalr.resize(picture, Scalr.Method.ULTRA_QUALITY, 640, Scalr.OP_ANTIALIAS);
+			File thumbnail = new File(thumbnailAddress);
+			ImageIO.write(scaledImg, fileExtension.substring(1), thumbnail);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public Result viewPicturePage(Request request, String pictureId){
 		return ok();
+	}
+	public Result getPicture(Request request, String pictureId, boolean isFullSize) {
+		Picture toLoad = Picture.find.byId(pictureId);
+		if (toLoad == null) return ok(new File(fileDirectory + "/Default.jpg"), Optional.of("Default.jpg"));
+		String pictureAddress = getPictureLocation(toLoad);
+		String pictureName = toLoad.getPictureId() + toLoad.getFileExtension();
+		if (isFullSize) return ok(new File(pictureAddress + "/" + pictureName), Optional.of(pictureName));
+		return ok(new File(pictureAddress + "/" + pictureId + "_thumbnail" + toLoad.getFileExtension()), Optional.of(pictureName));
 	}
 }

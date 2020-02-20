@@ -4,10 +4,10 @@
 } else {
     @layouts.main("Profile") { }{
         <header>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="profile">
                     <div class="profile-image">
-                        <img src='@routes.Assets.at("images/ETLogo.png")' alt="User">
+                        <img src='@routes.Assets.at("images/ETLogo.png")' alt="User" class="size-300">
                     </div>
                     <div class="profile-user-settings">
                         <h1 class="profile-user-name">@user.getUserName</h1>
@@ -20,12 +20,20 @@
                     </div>
                     <div class="profile-bio">
                         <p><span class="profile-real-name">@if(profile.getFirstName != null && profile.getLastName !=null){user.getUserProfile.getfirstName user.getUserProfile.getlastName}</span>
-                            @if(profile.getUserBio == null){@user.getUserName is too lazy to have bio} else { @profile.getUserBio}</p>
+                            @if(profile.getUserBio == null){@user.getUserName is too lazy to write a bio} else {@profile.getUserBio}</p>
                     </div>
                 </div>
                     <!--  END OF PROFILE SETTINGS   -->
             </div>
                 <!--  END OF CONTAINER  -->
         </header>
+        <div class="row center">
+        @layouts.formFields.pictureBox(new Picture(user))
+        @layouts.formFields.pictureBox(new Picture(user))
+        @layouts.formFields.pictureBox(new Picture(user))
+        @layouts.formFields.pictureBox(new Picture(user))
+        @layouts.formFields.pictureBox(new Picture(user))
+        @layouts.formFields.pictureBox(new Picture(user))
+        </div>
     }
 }

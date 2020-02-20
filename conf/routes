@@ -3,18 +3,19 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.ViewsController.index(request:Request)
-POST    /login                      controllers.UserController.logIn(request:Request)
-GET     /logout                     controllers.UserController.logOut(request:Request)
-POST    /newUser                    controllers.UserController.newUserAction(request:Request)
-GET     /profile/:userName/:userId  controllers.ViewsController.userProfile(request:Request, userName:String, userId:Long)
-GET     /profile/                   controllers.ViewsController.userSelfProfile(request:Request)
-GET     /listUsers                  controllers.ViewsController.userList(request:Request)
+GET			/																					controllers.ViewsController.index(request:Request)
+POST		/login																		controllers.UserController.logIn(request:Request)
+GET			/logout																		controllers.UserController.logOut(request:Request)
+POST		/newUser																	controllers.UserController.newUserAction(request:Request)
+GET			/profile/:userName/:userId								controllers.ViewsController.userProfile(request:Request, userName:String, userId:Long)
+GET			/profile/																	controllers.ViewsController.userSelfProfile(request:Request)
+GET			/listUsers																controllers.ViewsController.userList(request:Request)
 
-GET     /picture/view/:pictureId    controllers.PictureController.viewPicturePage(request:Request, pictureId:String)
-GET     /picture/new                controllers.PictureController.newPicturePage(request:Request)
-POST    /picture/new                controllers.PictureController.newPictureAction(request:Request)
+GET			/picture/view/:pictureId									controllers.PictureController.viewPicturePage(request:Request, pictureId:String)
+GET			/picture/get/:pictureId/:isFullSize				controllers.PictureController.getPicture(request:Request, pictureId:String, isFullSize:Boolean)
+GET			/picture/new															controllers.PictureController.newPicturePage(request:Request)
+POST		/picture/new															controllers.PictureController.newPictureAction(request:Request)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/at/*file            controllers.Assets.at(path="/public", file)
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET			/assets/at/*file													controllers.Assets.at(path="/public", file)
+GET			/assets/*file															controllers.Assets.versioned(path="/public", file: Asset)

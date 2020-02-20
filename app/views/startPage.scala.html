@@ -33,19 +33,19 @@
 		<div class="center">
 		<form class="form @if(isRegistering){collapse}" id="signInForm" method="post" action='@routes.UserController.logIn()'>
 			<img src='@routes.Assets.at("images/ETLogo.png")' class="size-100 mb-2" alt="">
-			<h2 class="form-title">Login</h2>
+			<h2 class="form-title">Enter</h2>
 			<fieldset hidden>@helper.CSRF.formField</fieldset>
 			<fieldset class="text-left">
 				@layouts.formFields.textBox("userEmail", "Email", "example@xyz.com", form("userEmail"), true)
 				@layouts.formFields.passwordBox("userPassword", "Password", "Password123", form("userPassword"), true)
 				<input type="submit" class="form-button mt-4" id="signInSubmit" value="Sign In">
-				<button class="form-button mt-4" type="button" id="registrationButton" aria-controls="registrationForm" aria-expanded="false" aria-label="Switch to Create an account">Create Account Instead</button>
+				<button class="form-button mt-4" type="button" id="registrationButton" aria-controls="registrationForm" aria-expanded="false" aria-label="Switch to Create an account"><span class="text-warning">Not a member?</span> Create Account</button>
 			</fieldset>
-			<p class="forget">Forgot Password ? <a href="#">Click Here</a></p>
+			<!--p class="forget">Forgot Password ? <a href="#">Click Here</a></p-->
 		</form>
 		<form class="form @if(!isRegistering){collapse}" id="registrationForm" method="post" action="@routes.UserController.newUserAction()">
 			<img src='@routes.Assets.at("images/ETLogo.png")' class="size-100 mb-2" alt="">
-			<h2 class="form-title">Create your Eternagram account</h2>
+			<h2 class="form-title">Join</h2>
 			<fieldset hidden>@helper.CSRF.formField</fieldset>
 			<fieldset class="text-left">
 				@layouts.formFields.textBox("userEmail", "Email", "example@xyz.com", form("userEmail"), true)
@@ -54,7 +54,7 @@
 				@layouts.formFields.textBox("phoneNumber", "Phone Number (optional)", "(619) 619-6969", form("phoneNumber"))
 				@layouts.formFields.dateBox("userDOB", "Date of Birth", "1900-10-20", form("userDOB"), true)
 				<input type="submit" class="form-button mt-4" id="registrationSubmit" value="Create Account">
-				<button class="form-button mt-4" type="button" id="signInButton" aria-controls="signInForm" aria-expanded="false" aria-label="Switch to Signing In">Sign In Instead</button>
+				<button class="form-button mt-4" type="button" id="signInButton" aria-controls="signInForm" aria-expanded="false" aria-label="Switch to Signing In"><span class="text-warning">Already a member?</span> Sign In</button>
 			</fieldset>
 		</form>
 		</div>
