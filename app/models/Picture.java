@@ -20,16 +20,19 @@ public class Picture extends Model {
 	@ManyToOne
 	private User pictureOwner;
 	private String fileExtension;
+	private int pictureComments;
 
-	public Picture(@Constraints.Required LocalDateTime uploadTime, @Constraints.Required String pictureCaption, @Constraints.Required User pictureOwner) {
+	public Picture(@Constraints.Required LocalDateTime uploadTime, @Constraints.Required String pictureCaption, @Constraints.Required User pictureOwner, int pictureComments) {
 		this.uploadTime = uploadTime;
 		this.pictureCaption = pictureCaption;
 		this.pictureOwner = pictureOwner;
+		this.pictureComments = pictureComments;
 		this.pictureId = pictureOwner.getUserId() + ";" + uploadTime.format(DateTimeFormats.ID);
 	}
 	public Picture(User pictureOwner){
 		this.pictureOwner = pictureOwner;
 		this.uploadTime = LocalDateTime.now();
+		this.pictureComments = 0;
 		this.pictureId = pictureOwner.getUserId() + ";" + uploadTime.format(DateTimeFormats.ID);
 	}
 
@@ -45,4 +48,6 @@ public class Picture extends Model {
 	public void setPictureOwner(User pictureOwner) {this.pictureOwner = pictureOwner;}
 	public String getFileExtension() {return fileExtension;}
 	public void setFileExtension(String fileExtension) {this.fileExtension = fileExtension;}
+	public int getPictureComments() {return pictureComments;}
+	public void setPictureComments(int pictureComments) {this.pictureComments = pictureComments;}
 }

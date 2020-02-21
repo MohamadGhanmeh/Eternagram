@@ -1,5 +1,6 @@
 package models;
 
+import controllers.MappingController;
 import controllers.ReverseAssets;
 import io.ebean.Finder;
 import io.ebean.Model;
@@ -29,8 +30,9 @@ public class User extends Model {
 	private LocalDateTime userDOB;
 	private Long pictureAmount;
 	private Long followerAmount;
+	private LocalDateTime lastUploadDate;
 
-	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount) {
+	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount, LocalDateTime lastUploadDate) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userPassword = userPassword;
@@ -39,6 +41,7 @@ public class User extends Model {
 		this.userDOB = userDOB;
 		this.pictureAmount = pictureAmount;
 		this.followerAmount = followerAmount;
+		this.lastUploadDate = lastUploadDate;
 	}
 
 	public static Finder<Long, User> find = new Finder<>(User.class);
@@ -62,6 +65,8 @@ public class User extends Model {
 	public void setPictureAmount(Long pictureAmount) {this.pictureAmount = pictureAmount;}
 	public Long getFollowerAmount() {return followerAmount;}
 	public void setFollowerAmount(Long followerAmount) {this.followerAmount = followerAmount;}
+	public LocalDateTime getLastUploadDate() {return lastUploadDate;}
+	public void setLastUploadDate(LocalDateTime lastUploadDate) {this.lastUploadDate = lastUploadDate;}
 
 	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
 	public boolean logIn(String password) {return password.equals(this.userPassword);}
@@ -72,4 +77,18 @@ public class User extends Model {
 	}
 	public void addFollower(){this.followerAmount++;}
 	public void removeFollower(){this.followerAmount--;}
+	public void addUploadedPicture(Picture picture) {
+		if (picture.getPictureOwner().equals(this)) {
+			pictureAmount += 1;
+			if (picture.getUploadTime().isAfter(lastUploadDate)) {lastUploadDate = picture.getUploadTime();}
+		}
+	}
+	public void removeUploadedPicture(Picture picture) {
+		if (picture.getPictureOwner().equals(this)) {
+			pictureAmount-=1;
+			if (picture.getUploadTime().equals(lastUploadDate)) {
+				lastUploadDate = MappingController.mapVisiblePictures(this,this).firstKey();
+			}
+		}
+	}
 }

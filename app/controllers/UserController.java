@@ -28,30 +28,6 @@ import java.util.TreeMap;
  */
 @Singleton
 public class UserController extends Controller {
-
-
-    public Result followUser(Long userId, Request request){
-        User userToFollow = User.find.byId(userId);
-        User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
-
-        if(userThatFollows == null){
-            return redirect(routes.ViewsController.index()).flashing("error","There was a problem.");
-        }
-
-        if (userToFollow == null ){
-            return redirect(routes.ViewsController.index()).flashing("error","There was a problem trying to follow that user");
-        }
-        if( Follows.find.byId(userThatFollows.getUserId() + "," + userToFollow.getUserId()) == null){
-            return redirect(routes.ViewsController.index()).flashing("error","you are already following user");
-        }
-
-        Follows toCreate = new Follows(userThatFollows, userToFollow,"");
-        toCreate.save();
-        return redirect(routes.ViewsController.userProfile( userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are now following user" + userToFollow.getUserName());
-
-    }
-
-
     private final FormFactory formFactory;
     @Inject
     public UserController(FormFactory formFactory) {this.formFactory = formFactory;}
@@ -148,5 +124,4 @@ public class UserController extends Controller {
         return redirect(routes.ViewsController.userProfile(userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are not following user " + userToFollow.getUserName() + " anymore");
 
     }
-
 }

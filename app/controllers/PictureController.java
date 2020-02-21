@@ -1,6 +1,7 @@
 package controllers;
 
 import formatters.Scalr;
+import models.Comment;
 import models.Picture;
 import models.User;
 import play.Environment;
@@ -18,6 +19,7 @@ import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,6 +38,8 @@ public class PictureController extends Controller {
 		this.formFactory = formFactory;
 		this.fileDirectory = initialize();
 	}
+
+	public static List<Comment> getComments(Picture picture) {return Comment.find.query().where().eq("commentedPicture", picture).findList();}
 
 	private String initialize() {
 		String directoryRoot = environment.rootPath().toString().concat("/data");
@@ -78,6 +82,8 @@ public class PictureController extends Controller {
 			// Open the file to upload into
 			newPicture.save();
 			newPicture.refresh();
+			// Update tje user's picture count and last post time
+			pictureOwner.addUploadedPicture(newPicture);
 			fileAddress = getPictureLocation(newPicture) + "/" + newPicture.getPictureId() + newPicture.getFileExtension();
 			directory = new File(fileAddress);
 			file.copyTo(directory, true);
