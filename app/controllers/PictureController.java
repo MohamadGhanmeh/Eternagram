@@ -1,6 +1,5 @@
 package controllers;
 
-import formatters.DateTimeFormats;
 import formatters.Scalr;
 import models.Picture;
 import models.User;

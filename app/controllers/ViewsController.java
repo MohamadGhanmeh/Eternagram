@@ -40,12 +40,14 @@ public class ViewsController extends Controller {
 		return redirect(routes.ViewsController.userProfile(user.getUserName(), user.getUserId()));
 	}
 	public Result userProfile(Request request, String userName, Long userId){
-		User user = User.find.byId(userId);
-		if(user==null || !user.getUserName().equals(userName)){
+		User user = User.findById(request.session().get("user").orElse("0"));
+		User target = User.find.byId(userId);
+		if(target==null || !target.getUserName().equals(userName)){
 			return redirect(routes.ViewsController.index()).flashing("error","The user you're trying to access doesn't exist");
 		}
-		UserProfile userProfile = user.getUserProfile();
-		if(userProfile == null) userProfile = new UserProfile(user);
-		return ok(views.html.navProfile.render(user, userProfile, request));
+		UserProfile userProfile = target.getUserProfile();
+		if(userProfile == null) userProfile = new UserProfile(target);
+		//return ok(views.html.navProfile.render(user, target, userProfile, request));
+		return ok();
 	}
 }
