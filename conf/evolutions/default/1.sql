@@ -3,10 +3,27 @@
 
 # --- !Ups
 
+create table comment (
+  comment_id                    varchar(255) not null,
+  comment_number                integer not null,
+  commentator_user_id           bigint,
+  commented_picture_picture_id  varchar(255),
+  comment                       varchar(255),
+  posting_time                  timestamp,
+  constraint pk_comment primary key (comment_id)
+);
+
+create table follows (
+  follows_id                    varchar(255) not null,
+  follower_user_id              bigint,
+  followee_user_id              bigint,
+  following_note                varchar(255),
+  constraint pk_follows primary key (follows_id)
+);
+
 create table picture (
   picture_id                    varchar(255) not null,
   upload_time                   timestamp,
-  picture_location              varchar(255),
   picture_caption               varchar(255),
   picture_owner_user_id         bigint,
   file_extension                varchar(255),
@@ -33,24 +50,57 @@ create table user_profile (
   last_name                     varchar(255),
   user_gender                   integer not null,
   user_bio                      varchar(255),
-  user_profile_picture          varchar(255),
+  user_profile_picture_picture_id varchar(255),
   url_facebook                  varchar(255),
   url_linkedin                  varchar(255),
   url_youtube                   varchar(255),
   url_twitch                    varchar(255),
   url_twitter                   varchar(255),
   url_personal                  varchar(255),
+  constraint uq_user_profile_user_profile_picture_picture_id unique (user_profile_picture_picture_id),
   constraint pk_user_profile primary key (profile_id)
 );
+
+create index ix_comment_commentator_user_id on comment (commentator_user_id);
+alter table comment add constraint fk_comment_commentator_user_id foreign key (commentator_user_id) references user (user_id) on delete restrict on update restrict;
+
+create index ix_comment_commented_picture_picture_id on comment (commented_picture_picture_id);
+alter table comment add constraint fk_comment_commented_picture_picture_id foreign key (commented_picture_picture_id) references picture (picture_id) on delete restrict on update restrict;
+
+create index ix_follows_follower_user_id on follows (follower_user_id);
+alter table follows add constraint fk_follows_follower_user_id foreign key (follower_user_id) references user (user_id) on delete restrict on update restrict;
+
+create index ix_follows_followee_user_id on follows (followee_user_id);
+alter table follows add constraint fk_follows_followee_user_id foreign key (followee_user_id) references user (user_id) on delete restrict on update restrict;
 
 create index ix_picture_picture_owner_user_id on picture (picture_owner_user_id);
 alter table picture add constraint fk_picture_picture_owner_user_id foreign key (picture_owner_user_id) references user (user_id) on delete restrict on update restrict;
 
+alter table user_profile add constraint fk_user_profile_user_profile_picture_picture_id foreign key (user_profile_picture_picture_id) references picture (picture_id) on delete restrict on update restrict;
+
 
 # --- !Downs
 
+alter table comment drop constraint if exists fk_comment_commentator_user_id;
+drop index if exists ix_comment_commentator_user_id;
+
+alter table comment drop constraint if exists fk_comment_commented_picture_picture_id;
+drop index if exists ix_comment_commented_picture_picture_id;
+
+alter table follows drop constraint if exists fk_follows_follower_user_id;
+drop index if exists ix_follows_follower_user_id;
+
+alter table follows drop constraint if exists fk_follows_followee_user_id;
+drop index if exists ix_follows_followee_user_id;
+
 alter table picture drop constraint if exists fk_picture_picture_owner_user_id;
 drop index if exists ix_picture_picture_owner_user_id;
+
+alter table user_profile drop constraint if exists fk_user_profile_user_profile_picture_picture_id;
+
+drop table if exists comment;
+
+drop table if exists follows;
 
 drop table if exists picture;
 

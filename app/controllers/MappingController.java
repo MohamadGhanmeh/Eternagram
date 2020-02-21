@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Comment;
 import models.Picture;
 import models.User;
 

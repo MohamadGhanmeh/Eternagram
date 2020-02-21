@@ -47,7 +47,6 @@ public class ViewsController extends Controller {
 		}
 		UserProfile userProfile = target.getUserProfile();
 		if(userProfile == null) userProfile = new UserProfile(target);
-		//return ok(views.html.navProfile.render(user, target, userProfile, request));
-		return ok();
+		return ok(views.html.navProfile.render(user, target, userProfile, request));
 	}
 }

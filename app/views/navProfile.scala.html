@@ -1,8 +1,9 @@
-@(user: User, profile: UserProfile)(implicit request: play.mvc.Http.Request)
+@import java.time.LocalDateTime
+@(user: User, target: User, profile: UserProfile)(implicit request: play.mvc.Http.Request)
 @if(profile == null){
     @layouts.main("Profile") { }{<div class="alert alert-danger" role="alert">An error has occurred, please try again.</div>}
 } else {
-    @layouts.main("Profile") { }{
+    @layouts.main("Profile") { <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/profilePage.css")'>}{
         <header>
             <div class="container-fluid">
                 <div class="profile">
@@ -10,17 +11,17 @@
                         <img src='@routes.Assets.at("images/ETLogo.png")' alt="User" class="size-300">
                     </div>
                     <div class="profile-user-settings">
-                        <h1 class="profile-user-name">@user.getUserName</h1>
+                        <h1 class="profile-user-name">@target.getUserName</h1>
                     </div>
                     <div class="profile-stats">
                         <ul>
-                            <li><span class="profile-stats-count">@user.getPictureAmount</span> posts</li>
-                            <li><span class="profile-stats-count">@user.getFollowerAmount</span> followers</li>
+                            <li><span class="profile-stats-count">@target.getPictureAmount</span> posts</li>
+                            <li><span class="profile-stats-count">@target.getFollowerAmount</span> followers</li>
                         </ul>
                     </div>
                     <div class="profile-bio">
-                        <p><span class="profile-real-name">@if(profile.getFirstName != null && profile.getLastName !=null){user.getUserProfile.getfirstName user.getUserProfile.getlastName}</span>
-                            @if(profile.getUserBio == null){@user.getUserName is too lazy to write a bio} else {@profile.getUserBio}</p>
+                        <p><span class="profile-real-name">@if(profile.getFirstName != null && profile.getLastName !=null){target.getUserProfile.getfirstName target.getUserProfile.getlastName}</span>
+                            @if(profile.getUserBio == null){ @target.getUserName is too lazy to write a bio} else { @profile.getUserBio}</p>
                     </div>
                 </div>
                     <!--  END OF PROFILE SETTINGS   -->
@@ -28,12 +29,7 @@
                 <!--  END OF CONTAINER  -->
         </header>
         <div class="row center">
-        @layouts.formFields.pictureBox(new Picture(user))
-        @layouts.formFields.pictureBox(new Picture(user))
-        @layouts.formFields.pictureBox(new Picture(user))
-        @layouts.formFields.pictureBox(new Picture(user))
-        @layouts.formFields.pictureBox(new Picture(user))
-        @layouts.formFields.pictureBox(new Picture(user))
+        @for(map:(LocalDateTime, Picture) <- controllers.MappingController.mapVisiblePictures(user , target)){ @layouts.formFields.pictureBox(map._2)}
         </div>
     }
 }
