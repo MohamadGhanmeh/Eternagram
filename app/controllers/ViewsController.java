@@ -31,10 +31,10 @@ public class ViewsController extends Controller {
 	}
 	public Result userList(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
-		return ok(views.html.navUsers.render(request, user));
+		return ok(views.html.navUsers.render(user, request));
 	}
 	public Result userProfile(Request request, String userName, Long userId){
 		User user = User.findById(request.session().get("user").orElse("0"));
-		return ok(views.html.navProfile.render(request, user));
+		return ok(views.html.navProfile.render(user, request));
 	}
 }

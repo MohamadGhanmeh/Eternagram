@@ -70,4 +70,6 @@ public class User extends Model {
 		if ((userProfile == null) || (userProfile.getUserProfilePicture() == null)) return "Address to default picture";
 		return userProfile.getUserProfilePicture();
 	}
+	public void addFollower(){this.followerAmount++;}
+	public void removeFollower(){this.followerAmount--;}
 }
