@@ -115,4 +115,38 @@ public class UserController extends Controller {
         return redirect(routes.ViewsController.index()).withNewSession();
     }
 
+    public Result followUser(Long userId, Request request){
+        User userToFollow = User.find.byId(userId);
+        User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
+        DynamicForm form = formFactory.form().bindFromRequest(request);
+        String note = form.get("followingNote");
+
+        if (userThatFollows == null) {return redirect(routes.ViewsController.index()).flashing("error","There was a problem.");}
+        if (userToFollow == null ) {return redirect(routes.ViewsController.index()).flashing("error","There was a problem trying to follow that user");}
+        if (Follows.find.byId(userThatFollows.getUserId() + "," + userToFollow.getUserId()) != null) {return redirect(routes.ViewsController.index()).flashing("error","you are already following that user");}
+
+        Follows toCreate = new Follows(userThatFollows, userToFollow, note);
+        toCreate.save();
+        userToFollow.addFollower();
+        userToFollow.update();
+        return redirect(routes.ViewsController.userProfile(userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are now following user " + userToFollow.getUserName());
+
+    }
+    public Result unfollowUser(Long userId, Request request){
+        User userToFollow = User.find.byId(userId);
+        User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
+
+        if (userThatFollows == null){return redirect(routes.ViewsController.index()).flashing("error","There was a problem.");}
+        if (userToFollow == null ){return redirect(routes.ViewsController.index()).flashing("error","There was a problem trying to stop following that user");}
+        String followingId = userThatFollows.getUserId() + "," + userToFollow.getUserId();
+        Follows toDelete = Follows.find.byId(followingId);
+        if (toDelete == null){return redirect(routes.ViewsController.index()).flashing("error","you are not following that user");}
+
+        toDelete.delete();
+        userToFollow.removeFollower();
+        userToFollow.update();
+        return redirect(routes.ViewsController.userProfile(userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are not following user " + userToFollow.getUserName() + " anymore");
+
+    }
+
 }
