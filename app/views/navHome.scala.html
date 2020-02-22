@@ -1,10 +1,27 @@
-@(user: User)(implicit request: play.mvc.Http.Request)
+@(user:User)(implicit request: play.mvc.Http.Request)
 
 @layouts.main("Home") { }{
-	<header>
-		<div style="align-content: center">
-		<img src='@routes.Assets.at("images/Midoria.png")' class="profile-image circle" alt="...">
-		This is a test
-		</div>
-	</header>
+	<div class="container">
+	@for(mapFollowee <- MappingController.mapFollowedUsers(user)) {
+		@for(mapFolloweePictures <- MappingController.mapVisiblePictures(user, mapFollowee)){
+		<div class="card">
+			<div class="imgBx">
+				<img src='@mapFollowee._2.getProfilePicture' alt="No Profile Picture">
+			</div>
+			<div class="contentBx">
+				<h2>@mapFollowee._2.getUserName</h2>
+				@if(mapFolloweePictures._2.getUploadTime == mapFollowee._2.getLastUploadDate){
+					<p>@mapFolloweePictures._2.getPictureCaption</p>
+				}
+
+				<!-- TODO :
+				 mapFollowee._2.getUserURL
+				-->
+				<a href="">
+					<span>Check It Out!</span>
+				</a>
+			</div>
+		</div>}
+	}
+	</div>
 }
