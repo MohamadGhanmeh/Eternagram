@@ -1,27 +1,25 @@
+@import java.time.LocalDateTime
+@import models.relationships.Follows
 @(user:User)(implicit request: play.mvc.Http.Request)
 
 @layouts.main("Home") { }{
-	<div class="container">
-	@for(mapFollowee <- MappingController.mapFollowedUsers(user)) {
-		@for(mapFolloweePictures <- MappingController.mapVisiblePictures(user, mapFollowee)){
-		<div class="card">
-			<div class="imgBx">
-				<img src='@mapFollowee._2.getProfilePicture' alt="No Profile Picture">
+	@for(mapFollowee: (LocalDateTime, Follows) <- MappingController.mapFollowedUsers(user)) {
+		<div class="card mb-3">
+			<div class="row no-gutters">
+				<div class="col-auto">
+					@layouts.formFields.pictureBox(mapFollowee._2.getFollowee.getProfilePicture, "size-300")
+				</div>
+				<div class="col-auto">
+					<div class="card-body">
+						<h5 class="card-title">@mapFollowee._2.getFollowee.getUserName</h5>
+						@for(mapFolloweePictures: (LocalDateTime, Picture) <- MappingController.mapVisiblePictures(user, mapFollowee._2.getFollowee)) {
+							@if(mapFolloweePictures._2.getUploadTime.isAfter(mapFollowee._2.getLastProfileView)) {
+								@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150");
+							}
+						}
+					</div>
+				</div>
 			</div>
-			<div class="contentBx">
-				<h2>@mapFollowee._2.getUserName</h2>
-				@if(mapFolloweePictures._2.getUploadTime == mapFollowee._2.getLastUploadDate){
-					<p>@mapFolloweePictures._2.getPictureCaption</p>
-				}
-
-				<!-- TODO :
-				 mapFollowee._2.getUserURL
-				-->
-				<a href="">
-					<span>Check It Out!</span>
-				</a>
-			</div>
-		</div>}
+		</div>
 	}
-	</div>
 }

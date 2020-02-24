@@ -70,10 +70,10 @@ public class User extends Model {
 
 	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
 	public boolean logIn(String password) {return password.equals(this.userPassword);}
-	public String getProfilePicture(){
+	public Picture getProfilePicture(){
 		UserProfile userProfile = getUserProfile();
-		if ((userProfile == null) || (userProfile.getUserProfilePicture() == null)) return "Address to default picture";
-		return userProfile.getUserProfilePicture().toString();
+		if ((userProfile == null) || (userProfile.getUserProfilePicture() == null)) return new Picture(this);
+		return userProfile.getUserProfilePicture();
 	}
 	public void addFollower(){this.followerAmount++;}
 	public void removeFollower(){this.followerAmount--;}

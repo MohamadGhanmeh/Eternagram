@@ -21,19 +21,19 @@ public class MappingController {
 		for (User user : User.find.all()) {answer.put(user.getUserName(), user);}
 		return answer;
 	}
-	public static SortedMap<LocalDateTime, User> mapFollowedUsers(User user) {
-		SortedMap<LocalDateTime, User> answer = new TreeMap<>(Collections.reverseOrder());
+	public static SortedMap<LocalDateTime, Follows> mapFollowedUsers(User user) {
+		SortedMap<LocalDateTime, Follows> answer = new TreeMap<>(Collections.reverseOrder());
 		for (Follows follows : Follows.findFollowees(user)) {
 			//IF user has a filter on, or privacy system is active, do the check here
-			answer.put(follows.getFollowee().getLastUploadDate(), follows.getFollowee());
+			answer.put(follows.getFollowee().getLastUploadDate(), follows);
 		}
 		return answer;
 	}
-	public static SortedMap<String, User> mapFollowingUsers(User user) {
-		SortedMap<String, User> answer = new TreeMap<>(Collections.reverseOrder());
+	public static SortedMap<String, Follows> mapFollowingUsers(User user) {
+		SortedMap<String, Follows> answer = new TreeMap<>(Collections.reverseOrder());
 		for (Follows follows : Follows.findFollowers(user)) {
 			//IF user has a filter on, or privacy system is active, do the check here
-			answer.put(follows.getFollower().getUserName(), follows.getFollower());
+			answer.put(follows.getFollower().getUserName(), follows);
 		}
 		return answer;
 	}

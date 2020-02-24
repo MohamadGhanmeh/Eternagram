@@ -5,10 +5,9 @@
 
 create table comment (
   comment_id                    varchar(255) not null,
-  comment_number                integer not null,
   commentator_user_id           bigint,
   commented_picture_picture_id  varchar(255),
-  comment                       varchar(255),
+  comment_content               varchar(255),
   posting_time                  timestamp,
   constraint pk_comment primary key (comment_id)
 );
@@ -18,6 +17,7 @@ create table follows (
   follower_user_id              bigint,
   followee_user_id              bigint,
   following_note                varchar(255),
+  last_profile_view             timestamp,
   constraint pk_follows primary key (follows_id)
 );
 
@@ -27,6 +27,7 @@ create table picture (
   picture_caption               varchar(255),
   picture_owner_user_id         bigint,
   file_extension                varchar(255),
+  picture_comments              integer not null,
   constraint pk_picture primary key (picture_id)
 );
 
@@ -39,6 +40,7 @@ create table user (
   user_dob                      timestamp,
   picture_amount                bigint,
   follower_amount               bigint,
+  last_upload_date              timestamp,
   constraint uq_user_user_name unique (user_name),
   constraint uq_user_user_email unique (user_email),
   constraint pk_user primary key (user_id)

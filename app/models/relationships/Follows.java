@@ -8,6 +8,7 @@ import play.data.validation.Constraints;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,7 @@ public class Follows extends Model {
     @ManyToOne
     private User followee;
     private String FollowingNote;
+    private LocalDateTime lastProfileView;
     public static Finder<String, Follows> find = new Finder<>(Follows.class);
     public static List<Follows> findFollowers(User followee) {return find.query().where().eq("followee", followee).findList();}
     public static List<Follows> findFollowees(User follower) {return find.query().where().eq("follower", follower).findList();}
@@ -31,6 +33,7 @@ public class Follows extends Model {
         this.followee = followee;
         this.followsId = follower.getUserId() + "," + followee.getUserId();
         this.FollowingNote = FollowingNote;
+        this.lastProfileView = LocalDateTime.now();
     }
 
     public User getFollower() {
@@ -52,5 +55,13 @@ public class Follows extends Model {
     }
     public void setFollowingNote(String FollowingNote) {
         this.FollowingNote = FollowingNote;
+    }
+
+    public LocalDateTime getLastProfileView() {
+        return lastProfileView;
+    }
+
+    public void setLastProfileView(LocalDateTime lastProfileView) {
+        this.lastProfileView = lastProfileView;
     }
 }

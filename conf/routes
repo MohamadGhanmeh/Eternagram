@@ -8,6 +8,8 @@ POST		/login																		controllers.UserController.logIn(request:Request)
 GET			/logout																		controllers.UserController.logOut(request:Request)
 POST		/newUser																	controllers.UserController.newUserAction(request:Request)
 GET			/profile/:userName/:userId								controllers.ViewsController.userProfile(request:Request, userName:String, userId:Long)
+GET			/follow/:userId											controllers.UserController.followUser(userId:Long,request:Request)
+GET			/unfollow/:userId										controllers.UserController.unfollowUser(userId:Long,request:Request)
 GET			/profile/																	controllers.ViewsController.userSelfProfile(request:Request)
 GET			/listUsers																controllers.ViewsController.userList(request:Request)
 
