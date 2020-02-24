@@ -129,6 +129,7 @@ public class PictureController extends Controller {
 		String commentContent = commentForm.get("commentContent");
 		User commentator = User.findById(request.session().get("user").orElse("0"));
 
+		if(picture == null) return badRequest();
 		if (!isCommentValid(commentContent)) return badRequest();
 		if (commentator == null) return badRequest();
 
@@ -139,14 +140,13 @@ public class PictureController extends Controller {
 
 	public Result deleteCommentAction(Picture picture, Request request){
 		DynamicForm commentForm = formFactory.form().bindFromRequest(request);
-		String commentId = commentForm.get("commentId");
+		String CommentId = commentForm.get("commentId");
 
+		if(picture == null) return badRequest();
 
-		User commentator = User.findById(request.session().get("user").orElse("0"));
-
-
-
+		Comment commentToDelete = Comment.find.byId(CommentId);
+		commentToDelete.delete();
 		picture.setPictureComments(picture.getPictureComments()-1);
-		return null;
+		return redirect(routes.PictureController.viewPicturePage(picture.getPictureId()));
 	}
 }

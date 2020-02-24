@@ -40,7 +40,7 @@ public class Comment extends Model {
     }
 
     public static Finder<String, Comment> find = new Finder<>(Comment.class);
-
+    
     public String getCommentId() {return commentId;}
     public void setCommentId(String commentId) {this.commentId = commentId;}
     public void setCommentId() {this.commentId = commentator.getUserId() + ";" + commentedPicture.getPictureId() + ";" + (commentedPicture.getPictureComments());}
