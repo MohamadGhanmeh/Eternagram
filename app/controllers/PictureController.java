@@ -118,4 +118,35 @@ public class PictureController extends Controller {
 		if (isFullSize) return ok(new File(pictureAddress + "/" + pictureName), Optional.of(pictureName));
 		return ok(new File(pictureAddress + "/" + pictureId + "_thumbnail" + toLoad.getFileExtension()), Optional.of(pictureName));
 	}
+
+	private boolean isCommentValid(String toCheck) {
+		if ((toCheck == null) || toCheck.trim().equals("")) return false;
+		return (toCheck.length() >= 4 && toCheck.length() <= 250);
+	}
+
+	public Result newCommentAction(Picture picture, Request request){
+		DynamicForm commentForm = formFactory.form().bindFromRequest(request);
+		String commentContent = commentForm.get("commentContent");
+		User commentator = User.findById(request.session().get("user").orElse("0"));
+
+		if (!isCommentValid(commentContent)) return badRequest();
+		if (commentator == null) return badRequest();
+
+		Comment newComment = new Comment(commentator, picture, commentContent);
+		picture.setPictureComments(picture.getPictureComments()+1);
+		return redirect(routes.PictureController.viewPicturePage(picture.getPictureId()));
+	}
+
+	public Result deleteCommentAction(Picture picture, Request request){
+		DynamicForm commentForm = formFactory.form().bindFromRequest(request);
+		String commentId = commentForm.get("commentId");
+
+
+		User commentator = User.findById(request.session().get("user").orElse("0"));
+
+
+
+		picture.setPictureComments(picture.getPictureComments()-1);
+		return null;
+	}
 }

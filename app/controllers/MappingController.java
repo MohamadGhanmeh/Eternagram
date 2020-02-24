@@ -48,11 +48,13 @@ public class MappingController {
 	}
 	// COMMENT
 	public static SortedMap<LocalDateTime, Comment> mapPictureComments(Picture picture) {
-		SortedMap<LocalDateTime, Comment> answer = new TreeMap<>(Collections.reverseOrder());
+		SortedMap<LocalDateTime, Comment> answer = new TreeMap<>();
 		for (Comment comment : PictureController.getComments(picture)) {
 			//IF user has a filter on, or privacy system is active, do the check here
 			answer.put(comment.getPostingTime(), comment);
 		}
 		return answer;
 	}
+
+
 }

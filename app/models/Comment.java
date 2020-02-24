@@ -36,7 +36,7 @@ public class Comment extends Model {
         this.commentedPicture = commentedPicture;
         this.commentContent = commentContent;
         this.postingTime = LocalDateTime.now();
-        this.commentId = commentator.getUserId() + ";" + commentedPicture.getPictureId() + ";" + (commentedPicture.getPictureComments());
+        this.commentId = commentator.getUserId() + ";" + commentedPicture.getPictureId() + ";" + this.postingTime;
     }
 
     public static Finder<String, Comment> find = new Finder<>(Comment.class);
