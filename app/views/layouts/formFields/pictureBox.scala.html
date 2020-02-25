@@ -1,1 +1,1 @@
-@(picture: Picture, classes: String = null) <img src='@routes.PictureController.getPicture(picture.getPictureId, isFullSize = false)' alt="File Error" class="thumbnail-clickable p-2 @if(classes==null){size-thumbnail} else {@classes}" data-selected='@picture.getPictureId'>
+@(picture: Picture, classes: String = null) <img src='@routes.PictureController.getPicture(picture.getPictureId, isFullSize = false)' alt="File Error" class="thumbnail-clickable @if(classes==null){size-thumbnail} else {@classes}" data-selected='@picture.getPictureId'>

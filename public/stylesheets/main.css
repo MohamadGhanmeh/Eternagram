@@ -13,12 +13,33 @@
 	--color-font-blue-light: #03a9f4;
 	--color-font-blue-normal: #006c9c;
 	--color-font-blue-dark: #00407a;
+	--color-font-green-light: #2fc6b7;
+	--color-font-green-darkRGBA: rgba(23, 99, 91, 0.5);
 }
 * {font-family: 'Poppins', sans-serif;}
 body {
 	min-height: 100vh;
 	color: white;
 	background-color: var(--color-background) !important;
+}
+.modal-content {
+	background-color: var(--color-background);
+	border-radius: 40px;
+}
+.pictureModal-card {background-color: var(--color-background);}
+.modal-backdrop.show {opacity: 1;}
+.pictureModal-comments {width: available;}
+.pictureModal-dialog {min-width: 95vw;}
+.pictureModal-picture {width: 100%; object-fit: scale-down;}
+.pictureModal-content {width: 100%;}
+@media (min-width: 80vh) {
+	.pictureModal-picture {width: 80vh; max-height: 80vh;}
+}
+@media (min-width: calc(80vh + 400px)) {
+	.pictureModal-dialog {min-width: 95vw; max-width: 95vw;}
+	.pictureModal-picture {width: 80vh; max-height: 80vh;}
+	.pictureModal-content {width: calc(100% - 80vh); max-height: 80vh;}
+	.pictureModal-comments {max-height: calc(80vh - 13em);}
 }
 .center {
 	display: flex;
@@ -29,17 +50,21 @@ body {
 .circle-left {border-bottom-left-radius: 50%; border-top-left-radius: 50%}
 .circle-bottom {border-bottom-left-radius: 50%; border-bottom-right-radius: 50%}
 .circle-top {border-top-left-radius: 50%; border-top-right-radius: 50%}
-.circle {border-radius: 50%}
+.circle {border-radius: 50%;}
+.btn-close {width: 1em; height: 1em; font-size: 2em;}
 /*
 	IMAGES
 */
 img.size-30 {width: 30px; height: 30px;}
+img.size-60 {width: 60px; height: 60px;}
 img.size-100 {width: 100px; height: 100px;}
 img.size-150 {width: 150px; height: 150px;}
+img.size-200 {width: 200px; height: 200px;}
 img.size-300 {width: 300px; height: 300px;}
 img.size-400 {width: 400px; height: 400px;}
 img.size-500 {width: 500px; height: 500px;}
-@media (max-width: 600px) {img.size-thumbnail {width: 100%; padding-top: 100%;}}
+.size-thumbnail {box-sizing: border-box; border: 2px solid var(--color-font-grey-normal);}
+@media (max-width: 600px) {img.size-thumbnail {width: 100%; min-height: 100vw;}}
 @media (min-width: 610px) {img.size-thumbnail {width: 300px; height: 300px;}}
 @media (min-width: 1200px) {img.size-thumbnail {width: 400px; height: 400px;}}
 
@@ -96,8 +121,34 @@ img.flip {transform: scaleX(-1);}
 }
 
 /*
+	BUTTONS
+ */
+.btn-outline-green {
+	color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-outline-green:hover {
+	color: var(--color-background);
+	background-color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-outline-green:focus, .btn-outline-green.focus {box-shadow: 0 0 0 0.2rem var(--color-font-green-darkRGBA);}
+.btn-outline-green.disabled, .btn-outline-green:disabled {
+	color: var(--color-font-green-light);
+	background-color: transparent;
+}
+.btn-outline-green:not(:disabled):not(.disabled):active, .btn-outline-green:not(:disabled):not(.disabled).active,
+.show > .btn-outline-green.dropdown-toggle {
+	color: var(--color-background);
+	background-color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-outline-green:not(:disabled):not(.disabled):active:focus, .btn-outline-green:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-green.dropdown-toggle:focus {box-shadow: 0 0 0 0.2rem var(--color-font-green-darkRGBA);}
+
+/*
 	FUNCTIONS
 */
 .thumbnail-clickable {
-	object-fit: scale-down;
+	object-fit: cover;
 }

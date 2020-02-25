@@ -1,13 +1,27 @@
 @import java.time.LocalDateTime
 @import models.relationships.Follows
-@(user:User)(implicit request: play.mvc.Http.Request)
+@(user:User)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 
-@layouts.main("Home") { }{
+@layouts.main("Home") {<link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/navHome.css")'>}{
 	@for(mapFollowee: (LocalDateTime, Follows) <- MappingController.mapFollowedUsers(user)) {
-		<div class="card mb-3">
+		<card class="card feed-card">
+			<div class="card-header">
+				@layouts.formFields.pictureBox(mapFollowee._2.getFollowee.getProfilePicture, "size-60 circle feed-header mr-3")<h2 class="feed-header">@mapFollowee._2.getFollowee.getUserName</h2>
+			</div>
+			<div class="card-body">
+				@for(mapFolloweePictures: (LocalDateTime, Picture) <- MappingController.mapVisiblePictures(user, mapFollowee._2.getFollowee)) {
+					@if(mapFolloweePictures._2.getUploadTime.isAfter(mapFollowee._2.getLastProfileView)) {
+						@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150");
+					}
+				}
+			</div>
+		</card>
+
+
+		<div class="card feed-card">
 			<div class="row no-gutters">
 				<div class="col-auto">
-					@layouts.formFields.pictureBox(mapFollowee._2.getFollowee.getProfilePicture, "size-300")
+					@layouts.formFields.pictureBox(mapFollowee._2.getFollowee.getProfilePicture, "size-300 circle")
 				</div>
 				<div class="col-auto">
 					<div class="card-body">

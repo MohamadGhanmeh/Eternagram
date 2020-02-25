@@ -1,0 +1,49 @@
+@(picture: Picture)(implicit form: DynamicForm, request: play.mvc.Http.Request)
+<div class="modal fade" id="pictureModal" tabindex="-1" role="dialog" aria-labelledby="pictureModalTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered pictureModal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="pictureModalTitle">@picture.getPictureCaption</h5>
+				<button type="button" class="btn btn-outline-danger circle btn-close center" data-dismiss="modal" aria-label="Close">
+					<i class="fas fa-times-circle"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="card pictureModal-card">
+					<div class="row no-gutters center">
+						<div class="pictureModal-picture">
+							<img src="@routes.PictureController.getPicture(picture.getPictureId, isFullSize = true)" class="card-img pictureModal-picture" alt="Error loading">
+						</div>
+						<div class="pictureModal-content">
+							<div class="card-body pictureModal-comments overflow-auto">
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+								<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+							</div>
+							<div>
+								<form action='@routes.PictureController.newCommentAction(picture.getPictureId)' method="post" class="pictureModal-newComment">
+									<fieldset hidden>@helper.CSRF.formField</fieldset>
+									<fieldset class="text-left">
+										@layouts.formFields.textArea("commentContent", "New comment", 3, 250, form("commentContent"), isRequired = true, "mb-1 pb-1")
+										<input type="submit" class="form-button mt-0" value="Upload">
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

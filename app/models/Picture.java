@@ -50,4 +50,16 @@ public class Picture extends Model {
 	public void setFileExtension(String fileExtension) {this.fileExtension = fileExtension;}
 	public int getPictureComments() {return pictureComments;}
 	public void setPictureComments(int pictureComments) {this.pictureComments = pictureComments;}
+	public void addCommentToPicture(Comment comment) {
+		if (comment.getCommentedPicture().equals(this)) {
+			pictureComments += 1;
+			this.update();
+		}
+	}
+	public void removeCommentFromPicture(Comment comment) {
+		if (comment.getCommentedPicture().equals(this)) {
+			pictureComments -= 1;
+			this.update();
+		}
+	}
 }

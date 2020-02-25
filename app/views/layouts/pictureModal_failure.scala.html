@@ -1,0 +1,22 @@
+@()(implicit form: DynamicForm, request: play.mvc.Http.Request)
+<div class="modal fade" id="pictureModal" tabindex="-1" role="dialog" aria-labelledby="pictureModalTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered pictureModal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="pictureModalTitle">That picture doesn't exist. Here is our default one!</h5>
+				<button type="button" class="btn btn-outline-danger circle btn-close center" data-dismiss="modal" aria-label="Close">
+					<i class="fas fa-times-circle"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="card pictureModal-card">
+					<div class="row no-gutters center">
+						<div class="pictureModal-picture">
+							<img src="@routes.PictureController.getPicture("0", isFullSize = true)" class="card-img pictureModal-picture" alt="Error loading">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

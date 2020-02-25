@@ -1,5 +1,5 @@
 @(name: String, label: String, placeHolder: String, form: Form.Field, isRequired: Boolean = false, classes: String = null)
-<div class='form-group mt-2 @if(classes!=null) {@classes}' id='@{name + "Holder"}'>
+<div class='form-group mt-2 @if(classes!=null) {@classes}else{form-row}' id='@{name + "Holder"}'>
 	<label for='@name' class="form-label">@label</label>
 	<input type="text" id='@name' name='@name' class="form-control form-input @if(form.hasErrors) {border-danger}" placeholder='@if(placeHolder!=null) {@placeHolder}' value='@form.value.orElse("")' @if(isRequired){required}>
 	@for(error: play.data.validation.ValidationError <- form.errors){<span class="text-danger">@error.message</span>}

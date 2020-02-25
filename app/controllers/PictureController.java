@@ -13,11 +13,16 @@ import play.mvc.Http;
 import play.mvc.Http.Request;
 import play.mvc.Result;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -54,14 +59,20 @@ public class PictureController extends Controller {
 		if ((toCheck == null) || toCheck.trim().equals("")) return false;
 		return (toCheck.length() <= 50);
 	}
+	private boolean isCommentValid(String toCheck) {
+		if ((toCheck == null) || toCheck.trim().equals("")) return false;
+		int length = toCheck.trim().length();
+		return (length >= 4 && length <= 250);
+	}
 	private String getPictureLocation(Picture picture){ return fileDirectory + "/" + picture.getPictureOwner().getUserId();}
 
 	public Result newPicturePage(Request request){
-		return ok();
+		DynamicForm pictureForm = formFactory.form();
+		return ok(views.html.navUpload.render(pictureForm, request));
 	}
 	public Result newPictureAction(Request request) {
 		DynamicForm pictureForm = formFactory.form().bindFromRequest(request);
-		String pictureCaption = pictureForm.get("pictureCaption");
+		String pictureCaption = pictureForm.get("pictureCaption").trim();
 		User pictureOwner = User.findById(request.session().get("user").orElse("0"));
 
 		if (!isCaptionValid(pictureCaption)) return badRequest();
@@ -88,7 +99,7 @@ public class PictureController extends Controller {
 			directory = new File(fileAddress);
 			file.copyTo(directory, true);
 			newPictureThumbnail(newPicture);
-			return redirect(routes.PictureController.viewPicturePage(newPicture.getPictureId()));
+			return redirect(routes.ViewsController.userProfile(pictureOwner.getUserName(), pictureOwner.getUserId())).flashing("success", "You have uploaded a new picture, titled \"" + pictureCaption + "\"");
 		} else {
 			return badRequest().flashing("error", "Missing file");
 		}
@@ -99,7 +110,7 @@ public class PictureController extends Controller {
 		String fileAddress = getPictureLocation(uploadedPicture);
 		String thumbnailAddress = fileAddress + "/" + pictureId + "_thumbnail" + fileExtension;
 		try {
-			BufferedImage picture = ImageIO.read(new File(fileAddress + pictureId + fileExtension));
+			BufferedImage picture = ImageIO.read(new File(fileAddress + "/" + pictureId + fileExtension));
 			BufferedImage scaledImg = Scalr.resize(picture, Scalr.Method.ULTRA_QUALITY, 640, Scalr.OP_ANTIALIAS);
 			File thumbnail = new File(thumbnailAddress);
 			ImageIO.write(scaledImg, fileExtension.substring(1), thumbnail);
@@ -108,45 +119,43 @@ public class PictureController extends Controller {
 		}
 	}
 	public Result viewPicturePage(Request request, String pictureId){
-		return ok();
+		DynamicForm commentForm = formFactory.form();
+		Picture picture = Picture.find.byId(pictureId);
+		if (picture==null) return ok(views.html.layouts.pictureModal_failure.render(commentForm, request));
+
+		return ok(views.html.layouts.pictureModal.render(picture, commentForm, request));
 	}
 	public Result getPicture(Request request, String pictureId, boolean isFullSize) {
 		Picture toLoad = Picture.find.byId(pictureId);
 		if (toLoad == null) return ok(new File(fileDirectory + "/Default.jpg"), Optional.of("Default.jpg"));
 		String pictureAddress = getPictureLocation(toLoad);
+		String pictureExtension = (isFullSize)? toLoad.getFileExtension() : "_thumbnail" + toLoad.getFileExtension();
 		String pictureName = toLoad.getPictureId() + toLoad.getFileExtension();
-		if (isFullSize) return ok(new File(pictureAddress + "/" + pictureName), Optional.of(pictureName));
-		return ok(new File(pictureAddress + "/" + pictureId + "_thumbnail" + toLoad.getFileExtension()), Optional.of(pictureName));
+		//if (isFullSize) return ok(new File(pictureAddress + "/" + pictureName), Optional.of(pictureName));
+		return ok(new File(pictureAddress + "/" + pictureId + pictureExtension), Optional.of(pictureName));
 	}
 
-	private boolean isCommentValid(String toCheck) {
-		if ((toCheck == null) || toCheck.trim().equals("")) return false;
-		return (toCheck.length() >= 4 && toCheck.length() <= 250);
-	}
-
-	public Result newCommentAction(Picture picture, Request request){
+	public Result newCommentAction(Request request, String pictureId){
 		DynamicForm commentForm = formFactory.form().bindFromRequest(request);
 		String commentContent = commentForm.get("commentContent");
 		User commentator = User.findById(request.session().get("user").orElse("0"));
+		Picture picture = Picture.find.byId(pictureId);
 
-		if(picture == null) return badRequest();
-		if (!isCommentValid(commentContent)) return badRequest();
-		if (commentator == null) return badRequest();
+		if (picture==null || commentator==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when posting the comment.");
+		if (!isCommentValid(commentContent)) return badRequest(); // TODO we have to complete the picture/comment page first
 
-		Comment newComment = new Comment(commentator, picture, commentContent);
-		picture.setPictureComments(picture.getPictureComments()+1);
-		return redirect(routes.PictureController.viewPicturePage(picture.getPictureId()));
+		Comment newComment = new Comment(commentator, picture, commentContent.trim());
+		newComment.save();
+		picture.addCommentToPicture(newComment);
+		return redirect(""); // TODO we have to complete the picture/comment page first
 	}
+	public Result deleteCommentAction(Request request, String commentId){
+		Comment toDelete = Comment.find.byId(commentId);
 
-	public Result deleteCommentAction(Picture picture, Request request){
-		DynamicForm commentForm = formFactory.form().bindFromRequest(request);
-		String CommentId = commentForm.get("commentId");
-
-		if(picture == null) return badRequest();
-
-		Comment commentToDelete = Comment.find.byId(CommentId);
-		commentToDelete.delete();
-		picture.setPictureComments(picture.getPictureComments()-1);
-		return redirect(routes.PictureController.viewPicturePage(picture.getPictureId()));
+		if (toDelete==null) return redirect(""); // TODO we have to complete the picture/comment page first
+		Picture commentedPicture = toDelete.getCommentedPicture();
+		toDelete.delete();
+		commentedPicture.removeCommentFromPicture(toDelete);
+		return redirect(""); // TODO we have to complete the picture/comment page first
 	}
 }

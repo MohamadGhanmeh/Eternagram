@@ -1,0 +1,6 @@
+@(form: DynamicForm)(implicit request: play.mvc.Http.Request)
+<fieldset hidden>@helper.CSRF.formField</fieldset>
+<fieldset class="text-left">
+	@layouts.formFields.textBox("pictureCaption", "Title", null, form("pictureCaption"), true)
+	@layouts.formFields.fileBox("file", "Picture to upload", form("file"), "image/*")
+</fieldset>

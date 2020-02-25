@@ -1,5 +1,5 @@
 @import java.time.LocalDateTime
-@(user: User, target: User, profile: UserProfile)(implicit request: play.mvc.Http.Request)
+@(user: User, target: User, profile: UserProfile)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 @if(profile == null){
     @layouts.main("Profile") { }{<div class="alert alert-danger" role="alert">An error has occurred, please try again.</div>}
 } else {

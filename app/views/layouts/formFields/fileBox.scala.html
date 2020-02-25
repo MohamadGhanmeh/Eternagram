@@ -1,7 +1,7 @@
 @(name: String, label: String, form: Form.Field, accepting: String = null, isRequired: Boolean = true, classes: String = null)
-<div class='form-group mt-2 @if(classes!=null) {@classes}' id='@{name + "Holder"}'>
+<div class='form-group mt-2 @if(classes!=null) {@classes}else{form-row}' id='@{name + "Holder"}'>
 	<label for='@name' class="form-label">@label</label>
-	<label id='text_@name' for='@name' class="form-control form-input center @if(form.hasErrors) {border-danger}">No file selected.</label>
+	<label id='text_@name' for='@name' class="form-control form-input @if(form.hasErrors) {border-danger}">No file selected.</label>
 	@for(error: play.data.validation.ValidationError <- form.errors){<span class="text-danger">@error.message</span>}
 	<fieldset class="collapse"><input type="file" id='@name' name='@name' value='@form.value.orElse("")' @if(isRequired){required} @if(accepting!=null){accept='@accepting'}></fieldset>
 </div>

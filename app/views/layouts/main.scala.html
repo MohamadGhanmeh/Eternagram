@@ -1,6 +1,6 @@
-@(title:String)(atHead:Html)(atBody:Html)(implicit request: play.mvc.Http.Request)
+@(title: String)(atHead: Html)(atBody: Html)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 	<head>
 		<link rel="icon" href='@routes.Assets.at("images/ETLogo.png")'>
 		<title>@title</title>
@@ -25,9 +25,9 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item @if(title.equals("Home")){active}"><a class="nav-link" href="#">Home</a></li>
+					<li class="nav-item @if(title.equals("Home")){active}"><a class="nav-link" href="@routes.ViewsController.index()">Home</a></li>
 					<li class="nav-item @if(title.equals("Profile")){active}"><a class="nav-link" href="@routes.ViewsController.userSelfProfile()">Profile</a></li>
-					<li class="nav-item @if(title.equals("Upload an image")){active}"><a class="nav-link" href="#">Upload</a></li>
+					<li class="nav-item @if(title.equals("Upload an image")){active}"><a class="nav-link" href="#" data-toggle="modal" data-target="#pictureUploadModal">Upload</a></li>
 					<li class="nav-item @if(title.equals("Users")){active}"><a class="nav-link" href="@routes.ViewsController.userList">Users</a></li>
 					<li class="nav-item"><a class="nav-link" href='@routes.UserController.logOut()'>Logout</a></li>
 				</ul>
@@ -50,7 +50,40 @@
 				@if(request.flash.get("warning").isPresent) {<div class="alert alert-warning col-12" role="alert">@request.flash.get("warning").get</div>}
 			</section>
 		} <noscript><div class="alert alert-danger" role="alert">JavaScript is currently not active or not supported by your browser!</div></noscript>
-		<main role="main" class="container-fluid"> @atBody
-		</main>
+		@* Modal used by user to upload a new picture *@
+		<div class="modal fade" id="pictureUploadModal" tabindex="-1" role="dialog" aria-labelledby="pictureUploadModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content m-4 p-4">
+					<div class="modal-title center">
+						<h2 class="form-title text-center">Upload a picture</h2>
+					</div>
+					<div class="modal-body">
+						<form action='@routes.PictureController.newPictureAction()' method="post" enctype="multipart/form-data" class="form">
+							<fieldset hidden>@helper.CSRF.formField</fieldset>
+							<fieldset class="text-left">
+								@layouts.formFields.textBox("pictureCaption", "Title", null, form("pictureCaption"), true)
+								@layouts.formFields.fileBox("file", "Picture to upload", form("file"), "image/*")
+								<input type="submit" class="form-button mt-4" value="Upload">
+								<button class="form-button mt-4" data-dismiss="modal"><span class="text-danger">Cancel</span></button>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="btn btn-primary" id="pictureModalDisplay" data-toggle="modal" data-target="#pictureModal" hidden></button>
+		<div id="pictureModalLoader" class="row"></div>
+		<main role="main" class="container-fluid"> @atBody </main>
 	</body>
+	<script>
+					$(function() {
+						var $pictureModal = $("#pictureModalLoader");
+						var $pictureModalBtn = $("#pictureModalDisplay");
+						$(".thumbnail-clickable").click(function () {
+							var value = $(this).data('selected');
+							$pictureModal.load('@routes.ViewsController.index()' + "picture/view/" + value, function(){$pictureModalBtn.click();});
+
+						});
+					});
+	</script>
 </html>

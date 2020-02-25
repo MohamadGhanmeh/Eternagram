@@ -24,15 +24,14 @@ public class ViewsController extends Controller {
 
 	public Result index(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
-		if (user == null) {
-			DynamicForm form = formFactory.form();
-			return ok(views.html.startPage.render(form, false, request));
-		}
-		return ok(views.html.navHome.render(user, request));
+		DynamicForm form = formFactory.form();
+		if (user == null) {return ok(views.html.startPage.render(form, false, request));}
+		return ok(views.html.navHome.render(user, form, request));
 	}
 	public Result userList(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
-		return ok(views.html.navUsers.render(user, request));
+		DynamicForm form = formFactory.form();
+		return ok(views.html.navUsers.render(user, form, request));
 	}
 	public Result userSelfProfile(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
@@ -45,8 +44,9 @@ public class ViewsController extends Controller {
 		if(target==null || !target.getUserName().equals(userName)){
 			return redirect(routes.ViewsController.index()).flashing("error","The user you're trying to access doesn't exist");
 		}
+		DynamicForm form = formFactory.form();
 		UserProfile userProfile = target.getUserProfile();
 		if(userProfile == null) userProfile = new UserProfile(target);
-		return ok(views.html.navProfile.render(user, target, userProfile, request));
+		return ok(views.html.navProfile.render(user, target, userProfile, form, request));
 	}
 }

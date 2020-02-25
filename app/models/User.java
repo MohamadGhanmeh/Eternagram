@@ -81,6 +81,7 @@ public class User extends Model {
 		if (picture.getPictureOwner().equals(this)) {
 			pictureAmount += 1;
 			if (picture.getUploadTime().isAfter(lastUploadDate)) {lastUploadDate = picture.getUploadTime();}
+			this.update();
 		}
 	}
 	public void removeUploadedPicture(Picture picture) {
@@ -89,6 +90,7 @@ public class User extends Model {
 			if (picture.getUploadTime().equals(lastUploadDate)) {
 				lastUploadDate = MappingController.mapVisiblePictures(this,this).firstKey();
 			}
+			this.update();
 		}
 	}
 }
