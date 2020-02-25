@@ -3,6 +3,7 @@ package controllers;
 import models.Comment;
 import models.Picture;
 import models.User;
+import models.UserProfile;
 import models.relationships.Follows;
 
 import javax.inject.Singleton;
@@ -13,6 +14,17 @@ import java.util.TreeMap;
 
 @Singleton
 public class MappingController {
+	public static class Triplet<A,B,C> {
+		public final A first;
+		public final B second;
+		public final C third;
+		public Triplet(A first, B second, C third) {
+			this.first = first;
+			this.second = second;
+			this.third = third;
+		}
+
+	}
 	// relationships.FOLLOWS
 
 	// USER
@@ -34,6 +46,18 @@ public class MappingController {
 		for (Follows follows : Follows.findFollowers(user)) {
 			//IF user has a filter on, or privacy system is active, do the check here
 			answer.put(follows.getFollower().getUserName(), follows);
+		}
+		return answer;
+	}
+	public static SortedMap<String, Triplet<User, UserProfile, Boolean>> mapVisibleUsers(User user) {
+		SortedMap<String, Triplet<User, UserProfile, Boolean>> answer = new TreeMap<>();
+		for (User target : User.find.all()) {
+			if (!user.equals(target)) {
+				UserProfile profile = target.getUserProfile();
+				if (profile == null) profile = new UserProfile(target);
+				Boolean isFollowing = Follows.find.byId(user.getUserId() + ";" + target.getUserId()) != null;
+				answer.put(target.getUserName(), new Triplet<>(target, profile, isFollowing));
+			}
 		}
 		return answer;
 	}

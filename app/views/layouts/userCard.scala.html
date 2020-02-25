@@ -1,0 +1,19 @@
+@(user: User, profile: UserProfile, isFollowed: Boolean)(implicit form: DynamicForm, request: play.mvc.Http.Request)
+<div class="card-user d-inline-block m-2">
+    <div class="card-user-box">
+        <div class="card-user-image">
+            @layouts.formFields.pictureBox(user.getProfilePicture, "card-user-image-picture")
+        </div>
+        <a class="btn-danger card-user-title" href='@routes.ViewsController.userProfile(user.getUserName, user.getUserId)'>@user.getUserName</a><br>
+        <div class="mb-3"><div class="mr-3 d-inline-block text-white">@user.getPictureAmount <i class="fas fa-images text-danger"></i></div>
+            <div class="d-inline-block text-white">@user.getFollowerAmount <i class="fas fa-users text-danger"></i></div>
+        </div>
+        <ul class="card-user-links">
+            @if(profile.getUrlFacebook!=null){<li class="card-user-li text-green"><a class="card-user-fab" href='@profile.getUrlFacebook'><i class="fab fa-facebook" aria-hidden="true"></i></a></li>}else{<li class="card-user-li text-grey"><i class="fab fa-facebook" aria-hidden="true"></i></li>}
+            @if(profile.getUrlTwitter!=null){<li class="card-user-li"><a class="card-user-fab text-green" href='@profile.getUrlTwitter'><i class="fab fa-twitter" aria-hidden="true"></i></a></li>}else{<li class="card-user-li text-grey"><i class="fab fa-twitter" aria-hidden="true"></i></li>}
+            @if(profile.getUrlYoutube!=null){<li class="card-user-li"><a class="card-user-fab text-green" href='@profile.getUrlYoutube'><i class="fab fa-youtube" aria-hidden="true"></i></a></li>}else{<li class="card-user-li text-grey"><i class="fab fa-youtube" aria-hidden="true"></i></li>}
+            @if(profile.getUrlLinkedin!=null){<li class="card-user-li"><a class="card-user-fab text-green" href='@profile.getUrlLinkedin'><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>}else{<li class="card-user-li text-grey"><i class="fab fa-linkedin" aria-hidden="true"></i></li>}
+            @if(profile.getUrlTwitch!=null){<li class="card-user-li"><a class="card-user-fab text-green" href='@profile.getUrlTwitch'><i class="fab fa-twitch" aria-hidden="true"></i></a></li>}else{<li class="card-user-li text-grey"><i class="fab fa-twitch" aria-hidden="true"></i></li>}
+        </ul>
+    </div>
+</div>

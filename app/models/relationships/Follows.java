@@ -31,7 +31,7 @@ public class Follows extends Model {
     public Follows( @Constraints.Required User follower, @Constraints.Required User followee, String FollowingNote){
         this.follower = follower;
         this.followee = followee;
-        this.followsId = follower.getUserId() + "," + followee.getUserId();
+        this.followsId = follower.getUserId() + ";" + followee.getUserId();
         this.FollowingNote = FollowingNote;
         this.lastProfileView = LocalDateTime.now();
     }
