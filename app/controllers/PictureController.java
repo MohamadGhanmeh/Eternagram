@@ -20,10 +20,9 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,12 +107,22 @@ public class PictureController extends Controller {
 		String fileExtension = uploadedPicture.getFileExtension();
 		String pictureId = uploadedPicture.getPictureId();
 		String fileAddress = getPictureLocation(uploadedPicture);
-		String thumbnailAddress = fileAddress + "/" + pictureId + "_thumbnail" + fileExtension;
+		String thumbnailAddress = fileAddress + "/" + pictureId + "_thumbnail.jpg";
+		File picture = new File(fileAddress + "/" + pictureId + fileExtension);
+		File thumbnail = new File(thumbnailAddress);
 		try {
-			BufferedImage picture = ImageIO.read(new File(fileAddress + "/" + pictureId + fileExtension));
-			BufferedImage scaledImg = Scalr.resize(picture, Scalr.Method.ULTRA_QUALITY, 640, Scalr.OP_ANTIALIAS);
-			File thumbnail = new File(thumbnailAddress);
-			ImageIO.write(scaledImg, fileExtension.substring(1), thumbnail);
+			BufferedImage toConvert = ImageIO.read(picture);
+			BufferedImage converted = new BufferedImage(toConvert.getWidth(), toConvert.getHeight(), BufferedImage.TYPE_INT_RGB);
+			converted.createGraphics().drawImage(toConvert, 0, 0, Color.white, null);
+			BufferedImage resized = Scalr.resize(converted, Scalr.Method.ULTRA_QUALITY, 640, Scalr.OP_ANTIALIAS);
+			ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+			thumbnail.createNewFile();
+			writer.setOutput(ImageIO.createImageOutputStream(new FileOutputStream(thumbnail)));
+			ImageWriteParam writeParam = writer.getDefaultWriteParam();
+			writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+			writeParam.setCompressionQuality(0.3f);
+			writer.write(null, new IIOImage(resized, null, null), writeParam);
+			writer.dispose();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -129,7 +138,7 @@ public class PictureController extends Controller {
 		Picture toLoad = Picture.find.byId(pictureId);
 		if (toLoad == null) return ok(new File(fileDirectory + "/Default.jpg"), Optional.of("Default.jpg"));
 		String pictureAddress = getPictureLocation(toLoad);
-		String pictureExtension = (isFullSize)? toLoad.getFileExtension() : "_thumbnail" + toLoad.getFileExtension();
+		String pictureExtension = (isFullSize)? toLoad.getFileExtension() : "_thumbnail.jpg";
 		String pictureName = toLoad.getPictureId() + toLoad.getFileExtension();
 		//if (isFullSize) return ok(new File(pictureAddress + "/" + pictureName), Optional.of(pictureName));
 		return ok(new File(pictureAddress + "/" + pictureId + pictureExtension), Optional.of(pictureName));
