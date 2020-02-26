@@ -1,0 +1,26 @@
+.profile {max-width: 95vw;}
+.profile::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.profile-edit-btn, .profile-follow-btn, .profile-user-name{
+	display: inline-block;
+}
+.profile-stats {
+	margin-top: 2rem;
+	padding: 1.2rem 0;
+	border-top: 0.1rem solid #dadada;
+	border-bottom: 0.1rem solid #dadada;
+}
+.profile-stats li {
+	font-size: 1rem;
+	display: inline-block;
+	line-height: 1.5;
+	margin-right: 4rem;
+	cursor: pointer;
+}
+.profile-stats li:last-of-type
+{
+	margin-right: 0;
+}

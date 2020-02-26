@@ -1,0 +1,11 @@
+@(comment: Comment)
+<div class="card">
+	<div class="row no-gutters">
+		@layouts.formFields.pictureBox(comment.getCommentator.getProfilePicture,"")
+		<div class="card-body">
+			<h5 class="card-title">@comment.getCommentator.getUserName</h5>
+			<pre class="card-text">@comment.getCommentContent</pre>
+			<p class="card-footer">@comment.getPostingTime.format(formatters.DateTimeFormats.DATE_TIME_24)</p>
+		</div>
+	</div>
+</div>

@@ -82,7 +82,6 @@
 						$(".thumbnail-clickable").click(function () {
 							var value = $(this).data('selected');
 							$pictureModal.load('@routes.ViewsController.index()' + "picture/view/" + value, function(){$pictureModalBtn.click();});
-
 						});
 					});
 	</script>

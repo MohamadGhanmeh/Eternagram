@@ -1,0 +1,11 @@
+@import java.time.LocalDateTime
+@(picture: Picture)
+@for((timestamp: LocalDateTime, comment: Comment) <- MappingController.mapPictureComments(picture)){
+	<div class="card commentModal-card">
+		<div class="commentModal-title">
+			@layouts.formFields.pictureBox(comment.getCommentator.getProfilePicture,"size-60 circle d-inline-block mr-2")
+			<div class="d-inline-block"><p class="commentModal-commentator">@comment.getCommentator.getUserName</p><p class="commentModal-timestamp">@timestamp.format(formatters.DateTimeFormats.DATE_TIME_24)</p></div>
+		</div>
+		<p class="commentModal-commentContent ml-2 mr-2">@comment.getCommentContent</p>
+	</div>
+}

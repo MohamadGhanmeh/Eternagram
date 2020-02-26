@@ -14,6 +14,7 @@
 	--color-font-blue-normal: #006c9c;
 	--color-font-blue-dark: #00407a;
 	--color-font-green-light: #2fc6b7;
+	--color-font-green-dark: #17635b;
 	--color-font-green-darkRGBA: rgba(23, 99, 91, 0.5);
 }
 * {font-family: 'Poppins', sans-serif;}
@@ -26,21 +27,23 @@ body {
 	background-color: var(--color-background);
 	border-radius: 40px;
 }
-.pictureModal-card {background-color: var(--color-background);}
+.pictureModal-card, .commentModal-card {background-color: var(--color-background); border: transparent;}
 .modal-backdrop.show {opacity: 1;}
-.pictureModal-comments {width: available;}
 .pictureModal-dialog {min-width: 95vw;}
 .pictureModal-picture {width: 100%; object-fit: scale-down;}
 .pictureModal-content {width: 100%;}
-@media (min-width: 80vh) {
-	.pictureModal-picture {width: 80vh; max-height: 80vh;}
-}
+.pictureModal-newComment {padding: 0 20px;}
+@media (min-width: 80vh) {.pictureModal-picture {width: 80vh; max-height: 80vh;}}
 @media (min-width: calc(80vh + 400px)) {
 	.pictureModal-dialog {min-width: 95vw; max-width: 95vw;}
 	.pictureModal-picture {width: 80vh; max-height: 80vh;}
 	.pictureModal-content {width: calc(100% - 80vh); max-height: 80vh;}
 	.pictureModal-comments {max-height: calc(80vh - 13em);}
 }
+.commentModal-title {display: flex; align-items: center;}
+.commentModal-timestamp {color: var(--color-font-grey-dark); padding: 0;margin: 0; font-size: 0.8em;}
+.commentModal-commentContent {color: var(--color-font-grey-light); font-size: 1em; white-space: pre-wrap;}
+.commentModal-commentator {color: white; font-size: 1em; margin: 0;}
 .center {
 	display: flex;
 	justify-content: center;
@@ -145,7 +148,30 @@ img.flip {transform: scaleX(-1);}
 }
 .btn-outline-green:not(:disabled):not(.disabled):active:focus, .btn-outline-green:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-green.dropdown-toggle:focus {box-shadow: 0 0 0 0.2rem var(--color-font-green-darkRGBA);}
-
+.btn-green {
+	color: #fff;
+	background-color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-green:hover {
+	color: #fff;
+	background-color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-green:focus, .btn-green.focus {box-shadow: 0 0 0 0.2rem var(--color-font-green-darkRGBA);}
+.btn-green.disabled, .btn-green:disabled {
+	color: #fff;
+	background-color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-green:not(:disabled):not(.disabled):active, .btn-green:not(:disabled):not(.disabled).active,
+.show > .btn-green.dropdown-toggle {
+	color: #fff;
+	background-color: var(--color-font-green-light);
+	border-color: var(--color-font-green-light);
+}
+.btn-green:not(:disabled):not(.disabled):active:focus, .btn-green:not(:disabled):not(.disabled).active:focus,
+.show > .btn-green.dropdown-toggle:focus {box-shadow: 0 0 0 0.2rem var(--color-font-green-darkRGBA);}
 /*
 	FUNCTIONS
 */

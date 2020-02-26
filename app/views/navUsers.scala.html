@@ -1,8 +1,8 @@
 @(user: User)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 
 @layouts.main("Users") {<link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/navUser.css")'>}{
-	@for(map: (String, MappingController.Triplet[User, UserProfile, Boolean]) <- MappingController.mapVisibleUsers(user)) {
-		@layouts.userCard(map._2.first, map._2.second, map._2.third)
+	@for(map: (String, MappingController.Triplet[User, UserProfile, java.lang.Boolean]) <- MappingController.mapVisibleUsers(user)) {
+		@layouts.contentBox.userCard(map._2.first, map._2.second, map._2.third)
 	}
 
 }

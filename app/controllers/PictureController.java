@@ -17,7 +17,6 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
@@ -156,7 +155,7 @@ public class PictureController extends Controller {
 		Comment newComment = new Comment(commentator, picture, commentContent.trim());
 		newComment.save();
 		picture.addCommentToPicture(newComment);
-		return redirect(""); // TODO we have to complete the picture/comment page first
+		return ok(); // TODO we have to complete the picture/comment page first
 	}
 	public Result deleteCommentAction(Request request, String commentId){
 		Comment toDelete = Comment.find.byId(commentId);
@@ -166,5 +165,10 @@ public class PictureController extends Controller {
 		toDelete.delete();
 		commentedPicture.removeCommentFromPicture(toDelete);
 		return redirect(""); // TODO we have to complete the picture/comment page first
+	}
+	public Result getPictureComments(Request request, String pictureId) {
+		Picture picture = Picture.find.byId(pictureId);
+		if (picture==null) return ok();
+		return ok(views.html.layouts.contentBox.comments.render(picture));
 	}
 }

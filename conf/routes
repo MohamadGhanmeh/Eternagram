@@ -17,6 +17,7 @@ GET			/picture/view/:pictureId									controllers.PictureController.viewPicture
 GET			/picture/get/:pictureId/:isFullSize				controllers.PictureController.getPicture(request:Request, pictureId:String, isFullSize:Boolean)
 GET			/picture/new															controllers.PictureController.newPicturePage(request:Request)
 POST		/picture/new															controllers.PictureController.newPictureAction(request:Request)
+GET			/comment/get/:pictureId										controllers.PictureController.getPictureComments(request:Request, pictureId:String)
 POST		/comment/new/:pictureId										controllers.PictureController.newCommentAction(request:Request, pictureId:String)
 
 # Map static resources from the /public folder to the /assets URL path

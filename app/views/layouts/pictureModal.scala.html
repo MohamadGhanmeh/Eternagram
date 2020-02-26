@@ -9,23 +9,14 @@
 					<i class="fas fa-times-circle"></i>
 				</button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body pt-0">
 				<div class="card pictureModal-card">
 					<div class="row no-gutters center">
 						<div class="pictureModal-picture">
 							<img src="@routes.PictureController.getPicture(picture.getPictureId, isFullSize = true)" class="card-img pictureModal-picture" alt="Error loading">
 						</div>
 						<div class="pictureModal-content">
-							<div class="card-body pictureModal-comments overflow-auto">
-							@for(mapPictureComments : (LocalDateTime,Comment) <- MappingController.mapPictureComments(picture)){
-								<div class="card-body pictureModal-comments overflow-auto">
-									<p class="card-text">
-									@layouts.formFields.pictureBox(mapPictureComments._2.getCommentator.getProfilePicture(), "size-60")
-									@mapPictureComments._2.getCommentContent
-									<p>
-								</div>
-							}
-							</div>
+							<div class="card-body pictureModal-comments overflow-auto" id="pictureModalComments"></div>
 							<div>
 								<form action='@routes.PictureController.newCommentAction(picture.getPictureId)' method="post" class="pictureModal-newComment" id="submitComment">
 									<fieldset hidden>@helper.CSRF.formField</fieldset>
@@ -42,28 +33,27 @@
 		</div>
 	</div>
 </div>
-
 <script type="text/javascript">
-
 	$(function() {
-		var $pictureModal = $("#pictureModalLoader");
-		var $pictureModalBtn = $("#pictureModalDisplay");
+		var $pictureModalComments = $("#pictureModalComments");
+		var $form = $('#submitComment');
 		$("#submitButton").click(function (e) {
-
-
-			var data = $('#submitComment').serialize();
+			var data = $form.serialize();
 			e.preventDefault();
 			e.stopPropagation();
 			$.ajax({
 				type: "POST",
 				url: '@routes.PictureController.newCommentAction(picture.getPictureId)' ,
 				data : data,
-				success: function(){
-					$pictureModal.load('@routes.ViewsController.index()' + "picture/view/@picture.getPictureId", function(){$pictureModalBtn.click();});
+				success: function () {
+					$pictureModalComments.load('@routes.PictureController.getPictureComments(picture.getPictureId)');
+					$pictureModalComments.stop().animate({
+						scrollTop: $pictureModalComments[0].scrollHeight
+					}, 800);
+					$form[0].reset();
 				}
 			});
-
-
 		});
+		$pictureModalComments.load('@routes.PictureController.getPictureComments(picture.getPictureId)');
 	});
 </script>
