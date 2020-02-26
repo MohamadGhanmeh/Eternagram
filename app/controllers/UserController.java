@@ -73,7 +73,7 @@ public class UserController extends Controller {
         if (!isUserPasswordValid(userPassword)) return badRequest(views.html.startPage.render(userForm.withError("userPassword", "That password is invalid."), true, request));
         if (!isPhoneNumberValid(phoneNumber)) return badRequest(views.html.startPage.render(userForm.withError("phoneNumber", "That phone number is invalid."), true, request));
         if (userDOB == null) return badRequest(views.html.startPage.render(userForm.withError("userDOB", "That date of birth is invalid."), true, request));
-        User newUser = new User(0,userName,userPassword,userEmail,phoneNumber,userDOB,0L,0L,LocalDateTime.now());
+        User newUser = new User(0,userName,userPassword,userEmail,phoneNumber,userDOB,0L,0L,LocalDateTime.now(),0L);
         newUser.save();
         newUser.refresh();
         return redirect(routes.ViewsController.index()).flashing("success", newUser.getUserName() + ", your Eternagram account was created successfully. You can now log in.");
@@ -99,12 +99,14 @@ public class UserController extends Controller {
 
         if (userThatFollows == null) {return redirect(routes.ViewsController.index()).flashing("error","There was a problem.");}
         if (userToFollow == null ) {return redirect(routes.ViewsController.index()).flashing("error","There was a problem trying to follow that user");}
-        if (Follows.find.byId(userThatFollows.getUserId() + "," + userToFollow.getUserId()) != null) {return redirect(routes.ViewsController.index()).flashing("error","you are already following that user");}
+        if (Follows.find.byId(userThatFollows.getUserId() + ";" + userToFollow.getUserId()) != null) {return redirect(routes.ViewsController.index()).flashing("error","you are already following that user");}
 
         Follows toCreate = new Follows(userThatFollows, userToFollow, note);
         toCreate.save();
         userToFollow.addFollower();
         userToFollow.update();
+        userThatFollows.addFollowing();
+        userThatFollows.update();
         return redirect(routes.ViewsController.userProfile(userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are now following user " + userToFollow.getUserName());
 
     }
@@ -114,13 +116,15 @@ public class UserController extends Controller {
 
         if (userThatFollows == null){return redirect(routes.ViewsController.index()).flashing("error","There was a problem.");}
         if (userToFollow == null ){return redirect(routes.ViewsController.index()).flashing("error","There was a problem trying to stop following that user");}
-        String followingId = userThatFollows.getUserId() + "," + userToFollow.getUserId();
+        String followingId = userThatFollows.getUserId() + ";" + userToFollow.getUserId();
         Follows toDelete = Follows.find.byId(followingId);
         if (toDelete == null){return redirect(routes.ViewsController.index()).flashing("error","you are not following that user");}
 
         toDelete.delete();
         userToFollow.removeFollower();
         userToFollow.update();
+        userThatFollows.removeFollowing();
+        userThatFollows.update();
         return redirect(routes.ViewsController.userProfile(userToFollow.getUserName(), userToFollow.getUserId())).flashing("success","you are not following user " + userToFollow.getUserName() + " anymore");
 
     }

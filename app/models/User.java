@@ -30,9 +30,10 @@ public class User extends Model {
 	private LocalDateTime userDOB;
 	private Long pictureAmount;
 	private Long followerAmount;
+	private Long followingAmount;
 	private LocalDateTime lastUploadDate;
 
-	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount, LocalDateTime lastUploadDate) {
+	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount, LocalDateTime lastUploadDate, Long followingAmount) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userPassword = userPassword;
@@ -42,6 +43,7 @@ public class User extends Model {
 		this.pictureAmount = pictureAmount;
 		this.followerAmount = followerAmount;
 		this.lastUploadDate = lastUploadDate;
+		this.followingAmount = followingAmount;
 	}
 
 	public static Finder<Long, User> find = new Finder<>(User.class);
@@ -67,6 +69,8 @@ public class User extends Model {
 	public void setFollowerAmount(Long followerAmount) {this.followerAmount = followerAmount;}
 	public LocalDateTime getLastUploadDate() {return lastUploadDate;}
 	public void setLastUploadDate(LocalDateTime lastUploadDate) {this.lastUploadDate = lastUploadDate;}
+	public Long getFollowingAmount() {return followingAmount; }
+	public void setFollowingAmount(Long followingAmount) { this.followingAmount = followingAmount; }
 
 	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
 	public boolean logIn(String password) {return password.equals(this.userPassword);}
@@ -76,7 +80,9 @@ public class User extends Model {
 		return userProfile.getUserProfilePicture();
 	}
 	public void addFollower(){this.followerAmount++;}
+	public void addFollowing(){this.followingAmount++;}
 	public void removeFollower(){this.followerAmount--;}
+	public void removeFollowing(){this.followingAmount--;}
 	public void addUploadedPicture(Picture picture) {
 		if (picture.getPictureOwner().equals(this)) {
 			pictureAmount += 1;

@@ -1,4 +1,5 @@
 @import java.time.LocalDateTime
+@import models.relationships.Follows
 @(user: User, target: User, profile: UserProfile)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 @if(profile == null){
     @layouts.main("Profile") { }{<div class="alert alert-danger" role="alert">An error has occurred, please try again.</div>}
@@ -8,15 +9,25 @@
             <div class="container-fluid">
                 <div class="profile">
                     <div class="profile-image">
-                        <img src='@routes.Assets.at("images/ETLogo.png")' alt="User" class="size-300">
+                        @layouts.formFields.pictureBox(target.getProfilePicture, "size-300")
                     </div>
                     <div class="profile-user-settings">
                         <h1 class="profile-user-name">@target.getUserName</h1>
+                        @if(user.equals(target)){
+                            <button class="btn btn-outline-danger profile-edit-btn">Edit Profile</button>
+                        } else {
+                            @if(Follows.find.byId(user.getUserId + ";" + target.getUserId) == null){
+                                <a class="btn btn-success profile-follow-btn" href='@routes.UserController.followUser(target.getUserId)'>Follow</a>
+                            } else {
+                                <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfollowUser(target.getUserId)'>Unfollow</a>
+                            }
+                        }
                     </div>
                     <div class="profile-stats">
                         <ul>
                             <li><span class="profile-stats-count">@target.getPictureAmount</span> posts</li>
                             <li><span class="profile-stats-count">@target.getFollowerAmount</span> followers</li>
+                            <li><span class="profile-stats-count">@target.getFollowingAmount</span> following</li>
                         </ul>
                     </div>
                     <div class="profile-bio">
@@ -29,7 +40,46 @@
                 <!--  END OF CONTAINER  -->
         </header>
         <div class="row center">
-        @for(map:(LocalDateTime, Picture) <- controllers.MappingController.mapVisiblePictures(user , target)){ @layouts.formFields.pictureBox(map._2)}
+
+        @for(map:(LocalDateTime, Picture) <- controllers.MappingController.mapVisiblePictures(user , target)){
+            <div class="gallery-item" tabindex="0">
+                @layouts.formFields.pictureBox(map._2)
+                <div class="thumbnail-clickable gallery-item-info" data-selected='@map._2.getPictureId'>
+                    <ul>
+                        <!-- TODO  Number of likes
+                         <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden></i> 50</li>
+                        -->
+                        <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden></i> @map._2.getPictureComments</li>
+                    </ul>
+                </div>
+            </div>
+        }
+
         </div>
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

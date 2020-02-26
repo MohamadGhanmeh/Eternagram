@@ -40,6 +40,7 @@ create table user (
   user_dob                      timestamp,
   picture_amount                bigint,
   follower_amount               bigint,
+  following_amount              bigint,
   last_upload_date              timestamp,
   constraint uq_user_user_name unique (user_name),
   constraint uq_user_user_email unique (user_email),
