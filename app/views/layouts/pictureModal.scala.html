@@ -1,3 +1,4 @@
+@import java.time.LocalDateTime
 @(picture: Picture)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 <div class="modal fade" id="pictureModal" tabindex="-1" role="dialog" aria-labelledby="pictureModalTitle" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered pictureModal-dialog" role="document">
@@ -16,27 +17,21 @@
 						</div>
 						<div class="pictureModal-content">
 							<div class="card-body pictureModal-comments overflow-auto">
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-								<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+							@for(mapPictureComments : (LocalDateTime,Comment) <- MappingController.mapPictureComments(picture)){
+								<div class="card-body pictureModal-comments overflow-auto">
+									<p class="card-text">
+									@layouts.formFields.pictureBox(mapPictureComments._2.getCommentator.getProfilePicture(), "size-60")
+									@mapPictureComments._2.getCommentContent
+									<p>
+								</div>
+							}
 							</div>
 							<div>
-								<form action='@routes.PictureController.newCommentAction(picture.getPictureId)' method="post" class="pictureModal-newComment">
+								<form action='@routes.PictureController.newCommentAction(picture.getPictureId)' method="post" class="pictureModal-newComment" id="submitComment">
 									<fieldset hidden>@helper.CSRF.formField</fieldset>
 									<fieldset class="text-left">
 										@layouts.formFields.textArea("commentContent", "New comment", 3, 250, form("commentContent"), isRequired = true, "mb-1 pb-1")
-										<input type="submit" class="form-button mt-0" value="Upload">
+										<input id='submitButton' type="button" class="form-button mt-0" value="Upload">
 									</fieldset>
 								</form>
 							</div>
@@ -47,3 +42,28 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+
+	$(function() {
+		var $pictureModal = $("#pictureModalLoader");
+		var $pictureModalBtn = $("#pictureModalDisplay");
+		$("#submitButton").click(function (e) {
+
+
+			var data = $('#submitComment').serialize();
+			e.preventDefault();
+			e.stopPropagation();
+			$.ajax({
+				type: "POST",
+				url: '@routes.PictureController.newCommentAction(picture.getPictureId)' ,
+				data : data,
+				success: function(){
+					$pictureModal.load('@routes.ViewsController.index()' + "picture/view/@picture.getPictureId", function(){$pictureModalBtn.click();});
+				}
+			});
+
+
+		});
+	});
+</script>

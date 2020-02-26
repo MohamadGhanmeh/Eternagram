@@ -11,7 +11,7 @@
 			<div class="card-body">
 				@for(mapFolloweePictures: (LocalDateTime, Picture) <- MappingController.mapVisiblePictures(user, mapFollowee._2.getFollowee)) {
 					@if(mapFolloweePictures._2.getUploadTime.isAfter(mapFollowee._2.getLastProfileView)) {
-						@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150");
+						@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150")
 					}
 				}
 			</div>
@@ -28,7 +28,7 @@
 						<h5 class="card-title">@mapFollowee._2.getFollowee.getUserName</h5>
 						@for(mapFolloweePictures: (LocalDateTime, Picture) <- MappingController.mapVisiblePictures(user, mapFollowee._2.getFollowee)) {
 							@if(mapFolloweePictures._2.getUploadTime.isAfter(mapFollowee._2.getLastProfileView)) {
-								@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150");
+								@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150")
 							}
 						}
 					</div>
