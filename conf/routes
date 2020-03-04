@@ -8,8 +8,8 @@ POST		/login																		controllers.UserController.logIn(request:Request)
 GET			/logout																		controllers.UserController.logOut(request:Request)
 POST		/newUser																	controllers.UserController.newUserAction(request:Request)
 GET			/profile/:userName/:userId								controllers.ViewsController.userProfile(request:Request, userName:String, userId:Long)
-GET			/follow/:userId											controllers.UserController.followUser(userId:Long,request:Request)
-GET			/unfollow/:userId										controllers.UserController.unfollowUser(userId:Long,request:Request)
+GET			/follow/:userId														controllers.UserController.followUser(userId:Long,request:Request)
+GET			/unfollow/:userId													controllers.UserController.unfollowUser(userId:Long,request:Request)
 GET			/profile/																	controllers.ViewsController.userSelfProfile(request:Request)
 GET			/listUsers																controllers.ViewsController.userList(request:Request)
 
@@ -19,6 +19,8 @@ GET			/picture/new															controllers.PictureController.newPicturePage(re
 POST		/picture/new															controllers.PictureController.newPictureAction(request:Request)
 GET			/comment/get/:pictureId										controllers.PictureController.getPictureComments(request:Request, pictureId:String)
 POST		/comment/new/:pictureId										controllers.PictureController.newCommentAction(request:Request, pictureId:String)
+GET			/like/new/:pictureId											controllers.PictureController.likePictureAction(request:Request, pictureId:String)
+GET			/like/remove/:pictureId										controllers.PictureController.unlikePictureAction(request:Request, pictureId:String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET			/assets/at/*file													controllers.Assets.at(path="/public", file)

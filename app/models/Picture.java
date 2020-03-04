@@ -21,12 +21,14 @@ public class Picture extends Model {
 	private User pictureOwner;
 	private String fileExtension;
 	private int pictureComments;
+	private int pictureLikes;
 
-	public Picture(@Constraints.Required LocalDateTime uploadTime, @Constraints.Required String pictureCaption, @Constraints.Required User pictureOwner, int pictureComments) {
+	public Picture(@Constraints.Required LocalDateTime uploadTime, @Constraints.Required String pictureCaption, @Constraints.Required User pictureOwner, int pictureComments, int pictureLikes) {
 		this.uploadTime = uploadTime;
 		this.pictureCaption = pictureCaption;
 		this.pictureOwner = pictureOwner;
 		this.pictureComments = pictureComments;
+		this.pictureLikes = pictureLikes;
 		this.pictureId = pictureOwner.getUserId() + ";" + uploadTime.format(DateTimeFormats.ID);
 	}
 	public Picture(User pictureOwner){
@@ -50,6 +52,9 @@ public class Picture extends Model {
 	public void setFileExtension(String fileExtension) {this.fileExtension = fileExtension;}
 	public int getPictureComments() {return pictureComments;}
 	public void setPictureComments(int pictureComments) {this.pictureComments = pictureComments;}
+	public int getPictureLikes() {return pictureLikes;}
+	public void setPictureLikes(int pictureLikes) {this.pictureLikes = pictureLikes;}
+
 	public void addCommentToPicture(Comment comment) {
 		if (comment.getCommentedPicture().equals(this)) {
 			pictureComments += 1;
@@ -62,4 +67,6 @@ public class Picture extends Model {
 			this.update();
 		}
 	}
+	public void addLikeToPicture(){this.pictureLikes++; this.save();}
+	public void removeLikeFromPicture() {this.pictureLikes--; this.save();}
 }

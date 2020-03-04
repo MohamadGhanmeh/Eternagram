@@ -4,6 +4,7 @@ import formatters.Scalr;
 import models.Comment;
 import models.Picture;
 import models.User;
+import models.relationships.Likes;
 import play.Environment;
 import play.data.DynamicForm;
 import play.data.FormFactory;
@@ -170,5 +171,31 @@ public class PictureController extends Controller {
 		Picture picture = Picture.find.byId(pictureId);
 		if (picture==null) return ok();
 		return ok(views.html.layouts.contentBox.comments.render(picture));
+	}
+
+	public Result likePictureAction(Request request, String pictureId) {
+		User liker = User.findById(request.session().get("user").orElse("0"));
+		Picture liked = Picture.find.byId(pictureId);
+
+		if (liker==null || liked==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when liking that picture.");
+
+		Likes like = new Likes(liker, liked);
+		like.save();
+		liked.addLikeToPicture();
+		liked.update();
+		return ok();    // TODO we have to complete the picture/comment page
+	}
+	public Result unlikePictureAction(Request request, String pictureId) {
+		User liker = User.findById(request.session().get("user").orElse("0"));
+		Picture liked = Picture.find.byId(pictureId);
+
+		if (liker==null || liked==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when unliking that picture.");
+		Likes like = Likes.find.byId(liker.getUserId() + ";" + liked.getPictureId());
+		if (like==null) return redirect(routes.ViewsController.index()).flashing("error", "You don't like that picture.");
+
+		like.delete();
+		liked.removeLikeFromPicture();
+		liked.update();
+		return ok();    // TODO we have to complete the picture/comment page
 	}
 }
