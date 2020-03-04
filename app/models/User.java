@@ -31,9 +31,10 @@ public class User extends Model {
 	private Long pictureAmount;
 	private Long followerAmount;
 	private Long followingAmount;
+	private Long friendsAmount;
 	private LocalDateTime lastUploadDate;
 
-	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount, LocalDateTime lastUploadDate, Long followingAmount) {
+	public User(long userId, @Constraints.Required String userName, @Constraints.Required String userPassword, @Constraints.Required String userEmail, String phoneNumber, @Constraints.Required LocalDateTime userDOB, Long pictureAmount, Long followerAmount,Long friendsAmount, LocalDateTime lastUploadDate, Long followingAmount) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userPassword = userPassword;
@@ -42,6 +43,7 @@ public class User extends Model {
 		this.userDOB = userDOB;
 		this.pictureAmount = pictureAmount;
 		this.followerAmount = followerAmount;
+		this.friendsAmount = friendsAmount;
 		this.lastUploadDate = lastUploadDate;
 		this.followingAmount = followingAmount;
 	}
@@ -81,8 +83,10 @@ public class User extends Model {
 	}
 	public void addFollower(){this.followerAmount++;}
 	public void addFollowing(){this.followingAmount++;}
+	public void addFriend(){this.friendsAmount++;}
 	public void removeFollower(){this.followerAmount--;}
 	public void removeFollowing(){this.followingAmount--;}
+	public void removeFriend(){this.friendsAmount--;}
 	public void addUploadedPicture(Picture picture) {
 		if (picture.getPictureOwner().equals(this)) {
 			pictureAmount += 1;

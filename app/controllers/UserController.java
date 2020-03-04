@@ -73,7 +73,7 @@ public class UserController extends Controller {
         if (!isUserPasswordValid(userPassword)) return badRequest(views.html.startPage.render(userForm.withError("userPassword", "That password is invalid."), true, request));
         if (!isPhoneNumberValid(phoneNumber)) return badRequest(views.html.startPage.render(userForm.withError("phoneNumber", "That phone number is invalid."), true, request));
         if (userDOB == null) return badRequest(views.html.startPage.render(userForm.withError("userDOB", "That date of birth is invalid."), true, request));
-        User newUser = new User(0,userName,userPassword,userEmail,phoneNumber,userDOB,0L,0L,LocalDateTime.now(),0L);
+        User newUser = new User(0,userName,userPassword,userEmail,phoneNumber,userDOB,0L,0L,0L,LocalDateTime.now(),0L);
         newUser.save();
         newUser.refresh();
         return redirect(routes.ViewsController.index()).flashing("success", newUser.getUserName() + ", your Eternagram account was created successfully. You can now log in.");
