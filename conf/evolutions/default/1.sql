@@ -21,6 +21,19 @@ create table follows (
   constraint pk_follows primary key (follows_id)
 );
 
+create table friends (
+  friends_id                    varchar(255) not null,
+  friend_requester_user_id      bigint,
+  friend_receiver_user_id       bigint,
+  request_status                integer,
+  request_date                  timestamp,
+  accepted_date                 timestamp,
+  constraint ck_friends_request_status check ( request_status in (0,1,2,3,4)),
+  constraint uq_friends_friend_requester_user_id unique (friend_requester_user_id),
+  constraint uq_friends_friend_receiver_user_id unique (friend_receiver_user_id),
+  constraint pk_friends primary key (friends_id)
+);
+
 create table likes (
   likes_id                      varchar(255) not null,
   liker_user_id                 bigint,
@@ -51,6 +64,7 @@ create table user (
   picture_amount                bigint,
   follower_amount               bigint,
   following_amount              bigint,
+  friends_amount                bigint,
   last_upload_date              timestamp,
   constraint uq_user_user_name unique (user_name),
   constraint uq_user_user_email unique (user_email),
@@ -86,6 +100,10 @@ alter table follows add constraint fk_follows_follower_user_id foreign key (foll
 create index ix_follows_followee_user_id on follows (followee_user_id);
 alter table follows add constraint fk_follows_followee_user_id foreign key (followee_user_id) references user (user_id) on delete restrict on update restrict;
 
+alter table friends add constraint fk_friends_friend_requester_user_id foreign key (friend_requester_user_id) references user (user_id) on delete restrict on update restrict;
+
+alter table friends add constraint fk_friends_friend_receiver_user_id foreign key (friend_receiver_user_id) references user (user_id) on delete restrict on update restrict;
+
 alter table likes add constraint fk_likes_liker_user_id foreign key (liker_user_id) references user (user_id) on delete restrict on update restrict;
 
 alter table likes add constraint fk_likes_liked_picture_id foreign key (liked_picture_id) references picture (picture_id) on delete restrict on update restrict;
@@ -110,6 +128,10 @@ drop index if exists ix_follows_follower_user_id;
 alter table follows drop constraint if exists fk_follows_followee_user_id;
 drop index if exists ix_follows_followee_user_id;
 
+alter table friends drop constraint if exists fk_friends_friend_requester_user_id;
+
+alter table friends drop constraint if exists fk_friends_friend_receiver_user_id;
+
 alter table likes drop constraint if exists fk_likes_liker_user_id;
 
 alter table likes drop constraint if exists fk_likes_liked_picture_id;
@@ -122,6 +144,8 @@ alter table user_profile drop constraint if exists fk_user_profile_user_profile_
 drop table if exists comment;
 
 drop table if exists follows;
+
+drop table if exists friends;
 
 drop table if exists likes;
 

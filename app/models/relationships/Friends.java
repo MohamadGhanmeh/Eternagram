@@ -1,5 +1,6 @@
 package models.relationships;
 
+import io.ebean.Expr;
 import io.ebean.Finder;
 import io.ebean.Model;
 import models.User;
@@ -7,6 +8,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,8 +18,10 @@ public class Friends extends Model {
     @Id
     String friendsId;
     @Constraints.Required
+    @OneToOne
     private User friendRequester;
     @Constraints.Required
+    @OneToOne
     private User friendReceiver;
     private RequestStatus requestStatus;
     private LocalDateTime requestDate;
@@ -25,6 +29,18 @@ public class Friends extends Model {
 
     public static Finder<String, Friends> find = new Finder<>(Friends.class);
     public static List<Friends> findFriends(User friend) {return find.query().where().eq("friend", friend).findList();}
+    public static Friends findRequest(User user1, User user2){
+        return find.query().where().or(
+                Expr.and(
+                        Expr.eq("friendReceiver", user1),
+                        Expr.eq("friendRequester", user2)
+                ),
+                Expr.and(
+                        Expr.eq("friendReceiver", user2),
+                        Expr.eq("friendRequester", user1)
+                )
+        ).findOne();
+    }
 
     public enum RequestStatus {
         ACCEPTED,
@@ -34,11 +50,11 @@ public class Friends extends Model {
         PENDING
     }
 
-    public Friends( @Constraints.Required User friendRequester, @Constraints.Required User friendReceiver, RequestStatus requestStatus) {
+    public Friends( @Constraints.Required User friendRequester, @Constraints.Required User friendReceiver) {
         this.friendsId = friendRequester.getUserId() + ";" + friendReceiver.getUserId();
         this.friendRequester = friendRequester;
         this.friendReceiver = friendReceiver;
-        this.requestStatus = requestStatus;
+        this.requestStatus = RequestStatus.PENDING;
         this.requestDate = LocalDateTime.now();
         this.acceptedDate = null;
     }
@@ -58,12 +74,14 @@ public class Friends extends Model {
 
     public void acceptRequest(User user){
         switch (requestStatus) {
-            case PENDING: case UNFRIENDEDBYRECEIVER:
+            case PENDING: case UNFRIENDEDBYRECEIVER: case DENIED:
                 if (!user.equals(friendReceiver)) break;
                 requestStatus = RequestStatus.ACCEPTED;
                 acceptedDate = LocalDateTime.now();
                 friendReceiver.addFriend();
+                friendReceiver.save();
                 friendRequester.addFriend();
+                friendRequester.save();
                 this.save();
                 break;
             case UNFRIENDEDBYREQUESTER:
@@ -71,7 +89,9 @@ public class Friends extends Model {
                 requestStatus = RequestStatus.ACCEPTED;
                 acceptedDate = LocalDateTime.now();
                 friendReceiver.addFriend();
+                friendReceiver.save();
                 friendRequester.addFriend();
+                friendRequester.save();
                 this.save();
                 break;
         }
@@ -88,7 +108,9 @@ public class Friends extends Model {
                 else if (user.equals(friendRequester)) requestStatus = RequestStatus.UNFRIENDEDBYREQUESTER;
                 else break;
                 friendRequester.removeFriend();
+                friendRequester.save();
                 friendReceiver.removeFriend();
+                friendReceiver.save();
                 this.acceptedDate = LocalDateTime.now();
                 this.save();
         }

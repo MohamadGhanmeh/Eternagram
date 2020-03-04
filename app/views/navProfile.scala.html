@@ -1,5 +1,6 @@
 @import java.time.LocalDateTime
 @import models.relationships.Follows
+@import models.relationships.Friends
 @(user: User, target: User, profile: UserProfile)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 @if(profile == null){
     @layouts.main("Profile") { }{<div class="alert alert-danger" role="alert">An error has occurred, please try again.</div>}
@@ -20,6 +21,32 @@
                                 <a class="btn btn-success profile-follow-btn" href='@routes.UserController.followUser(target.getUserId)'>Follow</a>
                             } else {
                                 <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfollowUser(target.getUserId)'>Unfollow</a>
+                                @defining(Friends.findRequest(user,target)) {friends =>
+                                    @if(friends==null) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Send Friend Request</a>} else {
+                                        @friends.getRequestStatus match {
+                                            case Friends.RequestStatus.PENDING => {
+                                                @if(friends.getFriendRequester.equals(user)) {
+                                                    <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Cancel Friend Request</a>
+                                                } else {
+                                                    <a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Accept Friend Request</a>
+                                                    <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Refuse Friend Request</a>
+                                                }
+                                            }
+                                            case Friends.RequestStatus.ACCEPTED => {
+                                                <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Unfriend User</a>
+                                            }
+                                            case Friends.RequestStatus.DENIED => {
+                                                @if(friends.getFriendReceiver.equals(user)) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Accept Friend Request</a>}
+                                            }
+                                            case Friends.RequestStatus.UNFRIENDEDBYRECEIVER => {
+                                                @if(friends.getFriendReceiver.equals(user)) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Become Friends Again</a>}
+                                            }
+                                            case Friends.RequestStatus.UNFRIENDEDBYREQUESTER => {
+                                                @if(friends.getFriendRequester.equals(user)) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Become Friends Again</a>}
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     </div>
@@ -49,7 +76,7 @@
                         <!-- TODO  Number of likes
                          <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden></i> 50</li>
                         -->
-                        <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden></i> @map._2.getPictureComments</li>
+                        <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment"></i> @map._2.getPictureComments</li>
                     </ul>
                 </div>
             </div>

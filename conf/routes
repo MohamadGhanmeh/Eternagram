@@ -10,6 +10,9 @@ POST		/newUser																	controllers.UserController.newUserAction(request:
 GET			/profile/:userName/:userId								controllers.ViewsController.userProfile(request:Request, userName:String, userId:Long)
 GET			/follow/:userId														controllers.UserController.followUser(userId:Long,request:Request)
 GET			/unfollow/:userId													controllers.UserController.unfollowUser(userId:Long,request:Request)
+GET			/friend/:userId														controllers.UserController.friendRequestAction(request:Request,userId:Long)
+GET			/unfriend/:userId													controllers.UserController.unfriendRequestAction(request:Request,userId:Long)
+
 GET			/profile/																	controllers.ViewsController.userSelfProfile(request:Request)
 GET			/listUsers																controllers.ViewsController.userList(request:Request)
 
