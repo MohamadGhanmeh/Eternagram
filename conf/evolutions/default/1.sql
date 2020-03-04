@@ -21,6 +21,15 @@ create table follows (
   constraint pk_follows primary key (follows_id)
 );
 
+create table friends (
+  friends_id                    varchar(255) not null,
+  request_status                integer,
+  request_date                  timestamp,
+  accepted_date                 timestamp,
+  constraint ck_friends_request_status check ( request_status in (0,1,2,3,4)),
+  constraint pk_friends primary key (friends_id)
+);
+
 create table picture (
   picture_id                    varchar(255) not null,
   upload_time                   timestamp,
@@ -41,6 +50,7 @@ create table user (
   picture_amount                bigint,
   follower_amount               bigint,
   following_amount              bigint,
+  friends_amount                bigint,
   last_upload_date              timestamp,
   constraint uq_user_user_name unique (user_name),
   constraint uq_user_user_email unique (user_email),
@@ -104,6 +114,8 @@ alter table user_profile drop constraint if exists fk_user_profile_user_profile_
 drop table if exists comment;
 
 drop table if exists follows;
+
+drop table if exists friends;
 
 drop table if exists picture;
 
