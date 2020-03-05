@@ -88,11 +88,6 @@ public class PictureController extends Controller {
 			toCreate = new Tag(6,"Love");
 			toCreate.save();
 		}
-		toCreate = Tag.findByTagContent("NSFW");
-		if (toCreate == null){
-			toCreate = new Tag(7,"Selfie");
-			toCreate.save();
-		}
 		toCreate = Tag.findByTagContent("Kawaii");
 		if (toCreate == null){
 			toCreate = new Tag(9,"Kawaii");
