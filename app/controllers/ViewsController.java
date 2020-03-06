@@ -59,4 +59,9 @@ public class ViewsController extends Controller {
 		if(userProfile == null) userProfile = new UserProfile(target);
 		return ok(views.html.navProfile.render(user, target, userProfile, form, request));
 	}
+	public Result socialPage(Request request) {
+		User user = User.findById(request.session().get("user").orElse("0"));
+		DynamicForm form = formFactory.form();
+		return ok(views.html.navSocial.render(user, form, request));
+	}
 }

@@ -25,10 +25,10 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item @if(title.equals("Home")){active}"><a class="nav-link" href="@routes.ViewsController.index()">Home</a></li>
-					<li class="nav-item @if(title.equals("Profile")){active}"><a class="nav-link" href="@routes.ViewsController.userSelfProfile()">Profile</a></li>
+					<li class="nav-item @if(title.equals("Home")){active}"><a class="nav-link" href='@routes.ViewsController.index()'>Home</a></li>
+					<li class="nav-item @if(title.equals("Profile")){active}"><a class="nav-link" href='@routes.ViewsController.userSelfProfile()'>Profile</a></li>
 					<li class="nav-item @if(title.equals("Upload an image")){active}"><a class="nav-link" href="#" data-toggle="modal" data-target="#pictureUploadModal">Upload</a></li>
-					<li class="nav-item @if(title.equals("Users")){active}"><a class="nav-link" href="@routes.ViewsController.userList">Users</a></li>
+					<li class="nav-item @if(title.equals("Social")){active}"><a class="nav-link" href='@routes.ViewsController.socialPage'>Social</a></li>
 					<li class="nav-item"><a class="nav-link" href='@routes.UserController.logOut()'>Logout</a></li>
 				</ul>
 				@* This will be the search bar that we'll use when searching for a specific user *@
