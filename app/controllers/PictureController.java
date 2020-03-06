@@ -234,11 +234,11 @@ public class PictureController extends Controller {
 		Picture taggedPicture = Picture.find.byId(pictureId);
 		Tag tagOfPicture = Tag.find.byId(tagId);
 
-		if (taggedPicture==null || tagOfPicture==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when tagging the picture.");
-		if (Tags.find.byId(tagId + ";" + taggedPicture.getPictureId()) != null) {return redirect(routes.ViewsController.index()).flashing("error","you are already tagged that photo");}
+		if (taggedPicture==null || tagOfPicture==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when untagging the picture.");
+		Tags toDelete = Tags.find.byId(tagId + ";" + taggedPicture.getPictureId());
+		if (toDelete == null) {return redirect(routes.ViewsController.index()).flashing("error","That photo is not tagged");}
 
-		Tags newTags = new Tags(taggedPicture, tagOfPicture);
-		newTags.delete();
+		toDelete.delete();
 		return ok();
 	}
 

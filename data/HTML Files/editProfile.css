@@ -1,0 +1,31 @@
+body
+{
+    background-color: #131419 !important;
+    color: white;
+}
+.edit-card
+{
+    background-color: transparent;
+    box-shadow: 0 20px 50px rgba(1,2,3,.3);
+}
+.edit-box
+{
+    border-radius: 40px;
+    border: none;
+    background: #16181b;
+}
+.cardImg
+{
+    width: 120px;
+    height: 120px;
+    margin-left: 27%;
+}
+.user-pic
+{
+    vertical-align: middle;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+}
