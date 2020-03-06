@@ -3,8 +3,10 @@ package controllers;
 import formatters.Scalr;
 import models.Comment;
 import models.Picture;
+import models.Tag;
 import models.User;
 import models.relationships.Likes;
+import models.relationships.Tags;
 import play.Environment;
 import play.data.DynamicForm;
 import play.data.FormFactory;
@@ -41,6 +43,7 @@ public class PictureController extends Controller {
 		this.environment = environment;
 		this.formFactory = formFactory;
 		this.fileDirectory = initialize();
+		this.initializeTags();
 	}
 
 	public static List<Comment> getComments(Picture picture) {return Comment.find.query().where().eq("commentedPicture", picture).findList();}
@@ -54,6 +57,49 @@ public class PictureController extends Controller {
 		if (!directory.exists()) {directory.mkdir();}
 		return directory.getAbsolutePath();
 	}
+	private void initializeTags(){
+		Tag toCreate = Tag.findByTagContent("Selfie");
+		if (toCreate == null){
+			toCreate = new Tag(1,"Selfie");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("Portrait");
+		if (toCreate == null){
+			toCreate = new Tag(2,"Portait");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("NSFW");
+		if (toCreate == null){
+			toCreate = new Tag(3,"NSFW");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("WCW");
+		if (toCreate == null){
+			toCreate = new Tag(4,"WCW");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("OTD");
+		if (toCreate == null){
+			toCreate = new Tag(5,"OTD");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("Love");
+		if (toCreate == null){
+			toCreate = new Tag(6,"Love");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("Kawaii");
+		if (toCreate == null){
+			toCreate = new Tag(9,"Kawaii");
+			toCreate.save();
+		}
+		toCreate = Tag.findByTagContent("Food");
+		if (toCreate == null){
+			toCreate = new Tag(10,"Food");
+			toCreate.save();
+		}
+	}
+
 	private boolean isCaptionValid(String toCheck) {
 		if ((toCheck == null) || toCheck.trim().equals("")) return false;
 		return (toCheck.length() <= 50);
@@ -171,6 +217,29 @@ public class PictureController extends Controller {
 		Picture picture = Picture.find.byId(pictureId);
 		if (picture==null) return ok();
 		return ok(views.html.layouts.contentBox.comments.render(picture));
+	}
+	public Result tagPictureAction(Request request, long tagId, String pictureId){
+		Picture taggedPicture = Picture.find.byId(pictureId);
+		Tag tagOfPicture = Tag.find.byId(tagId);
+
+		if (taggedPicture==null || tagOfPicture==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when tagging the picture.");
+		if (Tags.find.byId(tagId + ";" + taggedPicture.getPictureId()) != null) {return redirect(routes.ViewsController.index()).flashing("error","you are already tagged that photo");}
+
+		Tags newTags = new Tags(taggedPicture, tagOfPicture);
+		newTags.save();
+		return ok();
+	}
+
+	public Result untagPictureAction(Request request, long tagId, String pictureId){
+		Picture taggedPicture = Picture.find.byId(pictureId);
+		Tag tagOfPicture = Tag.find.byId(tagId);
+
+		if (taggedPicture==null || tagOfPicture==null) return redirect(routes.ViewsController.index()).flashing("error", "There was an error when untagging the picture.");
+		Tags toDelete = Tags.find.byId(tagId + ";" + taggedPicture.getPictureId());
+		if (toDelete == null) {return redirect(routes.ViewsController.index()).flashing("error","That photo is not tagged");}
+
+		toDelete.delete();
+		return ok();
 	}
 
 	public Result likePictureAction(Request request, String pictureId) {

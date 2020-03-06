@@ -66,10 +66,10 @@
             </div>
                 <!--  END OF CONTAINER  -->
         </header>
-        <div class="row center">
+        <div class="row center" style="justify-content: space-between">
 
         @for(map:(LocalDateTime, Picture) <- controllers.MappingController.mapVisiblePictures(user , target)){
-            <div class="gallery-item" tabindex="0">
+            <div class="gallery-item" tabindex="0" style="flex: 0 0 auto">
                 @layouts.formFields.pictureBox(map._2)
                 <div class="thumbnail-clickable gallery-item-info" data-selected='@map._2.getPictureId'>
                     <ul>
