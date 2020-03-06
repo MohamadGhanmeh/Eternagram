@@ -4,6 +4,7 @@
 
 # An example controller showing a sample home page
 GET			/																					controllers.ViewsController.index(request:Request)
+GET			/initialize																controllers.PictureController.initializeTags()
 POST		/login																		controllers.UserController.logIn(request:Request)
 GET			/logout																		controllers.UserController.logOut(request:Request)
 POST		/newUser																	controllers.UserController.newUserAction(request:Request)

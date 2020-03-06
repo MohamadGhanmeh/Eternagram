@@ -43,7 +43,6 @@ public class PictureController extends Controller {
 		this.environment = environment;
 		this.formFactory = formFactory;
 		this.fileDirectory = initialize();
-		this.initializeTags();
 	}
 
 	public static List<Comment> getComments(Picture picture) {return Comment.find.query().where().eq("commentedPicture", picture).findList();}
@@ -57,7 +56,7 @@ public class PictureController extends Controller {
 		if (!directory.exists()) {directory.mkdir();}
 		return directory.getAbsolutePath();
 	}
-	private void initializeTags(){
+	public Result initializeTags(){
 		Tag toCreate = Tag.findByTagContent("Selfie");
 		if (toCreate == null){
 			toCreate = new Tag(1,"Selfie");
@@ -98,6 +97,7 @@ public class PictureController extends Controller {
 			toCreate = new Tag(10,"Food");
 			toCreate.save();
 		}
+		return redirect(routes.ViewsController.index());
 	}
 
 	private boolean isCaptionValid(String toCheck) {

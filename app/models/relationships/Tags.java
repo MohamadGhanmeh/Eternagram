@@ -22,17 +22,17 @@ public class Tags extends Model {
     @ManyToOne
     private Tag tagOfPicture;
 
-    public static Finder<String, Tags> find = new Finder<>(Tags.class);
-    /*Finds tags relations of a tag*/
-    public static List<Tags> findByTag(Tag tagOfPicture) {return find.query().where().eq("taggedPicture", tagOfPicture).findList();}
-    /*Finds tags relations of picture*/
-    public static List<Tags> findByPicture(Picture taggedPicture) {return find.query().where().eq("taggedPicture", taggedPicture).findList();}
-
     public Tags(@Constraints.Required Picture taggedPicture, @Constraints.Required Tag tagOfPicture) {
         TagsId = tagOfPicture.getTagId() + ";" +taggedPicture.getPictureId();
         this.taggedPicture = taggedPicture;
         this.tagOfPicture = tagOfPicture;
     }
+
+    public static Finder<String, Tags> find = new Finder<>(Tags.class);
+    /*Finds tags relations of a tag*/
+    public static List<Tags> findByTag(Tag tagOfPicture) {return find.query().where().eq("taggedPicture", tagOfPicture).findList();}
+    /*Finds tags relations of picture*/
+    public static List<Tags> findByPicture(Picture taggedPicture) {return find.query().where().eq("taggedPicture", taggedPicture).findList();}
 
     public String getTagsId() {return TagsId;}
     public void setTagsId(String tagsId) {TagsId = tagsId;}
