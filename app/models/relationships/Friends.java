@@ -14,7 +14,6 @@ import java.util.List;
 
 @Entity
 public class Friends extends Model {
-
     @Id
     String friendsId;
     @Constraints.Required
@@ -115,5 +114,4 @@ public class Friends extends Model {
                 this.save();
         }
     }
-
 }
