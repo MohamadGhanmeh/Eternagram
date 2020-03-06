@@ -2,6 +2,7 @@ package controllers;
 
 import models.User;
 import models.UserProfile;
+import models.relationships.Follows;
 import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -12,6 +13,7 @@ import play.routing.JavaScriptReverseRouter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.LocalDateTime;
 
 /**
  * Handle the communication between actors. It's the interface that holds all methods available to the public.
@@ -46,6 +48,12 @@ public class ViewsController extends Controller {
 		if(target==null || !target.getUserName().equals(userName)){
 			return redirect(routes.ViewsController.index()).flashing("error","The user you're trying to access doesn't exist");
 		}
+		Follows follows = Follows.find.byId(user.getUserId() + ";" + target.getUserId());
+		if (follows!=null) {
+			follows.setLastProfileView(LocalDateTime.now());
+			follows.update();
+		}
+
 		DynamicForm form = formFactory.form();
 		UserProfile userProfile = target.getUserProfile();
 		if(userProfile == null) userProfile = new UserProfile(target);

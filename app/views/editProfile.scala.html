@@ -32,9 +32,9 @@
                 </ul>
                 <div class="tab-content pt-3">
                   <div class="tab-pane active">
-                    <form class="form" action="" method="post">
-                      <fieldset hidden>@helper.CSRF.formField </fieldset>
-                      <div class="row">
+                    <form class="form" action='' method="post">
+                      <fieldset hidden>@helper.CSRF.formField</fieldset>
+                      <fieldset id="userProfile-info">
                         @layouts.formFields.textBox("urlFacebook", "FaceBook Link", "http://www.facebook.com/myPage", profileForm("urlFacebook"), isRequired = false, "col-12")
                         @layouts.formFields.textBox("urlTwitter", "Twitter Link", "http://www.twitter.com/myPage", profileForm("urlTwitter"), isRequired = false, "col-12")
                         @layouts.formFields.textBox("urlYoutube", "Youtube Link", "http://www.youtube.com/myPage", profileForm("urlYoutube"), isRequired = false, "col-12")
@@ -42,41 +42,17 @@
                         @layouts.formFields.textBox("urlLinkedin", "Linkedin Link", "http://www.linkedin.com/myPage", profileForm("urlLinkedin"), isRequired = false, "col-12")
                         @layouts.formFields.textBox("urlPersonal", "Personal Link", "http://www.myPage.com", profileForm("urlPersonal"), isRequired = false, "col-12")
                         @layouts.formFields.textArea("userBio", "My Bio", 5, 250, profileForm("userBio"), isRequired = false, "col-12")
-                      </div>
-                      <div class="row">
-                        <div class="col-12 col-sm-6 mb-3">
-                          <div class="mb-2"><b>Change Password</b></div>
-                          <div class="row">
-                            <div class="col">
-                              <div class="form-group">
-                                <label>Current Password</label>
-                                <input class="form-control" type="password" placeholder="••••••">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col">
-                              <div class="form-group">
-                                <label>New Password</label>
-                                <input class="form-control" type="password" placeholder="••••••">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col">
-                              <div class="form-group">
-                                <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
-                                <input class="form-control" type="password" placeholder="••••••"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col d-flex justify-content-end">
-                          <button class="btn btn-danger mr-2" type="submit">Save Changes</button>
-                          <button class="btn btn-secondary" type="submit">Cancel Changes</button>
-                        </div>
-                      </div>
+                      </fieldset>
+                      <fieldset id="userPassword">
+                        @layouts.formFields.passwordBox("oldPassword","Current Password (Required for all changes)", "Password123", profileForm("oldPassword"), true, "col-12")
+                        @layouts.formFields.passwordBox("newPassword1","New Password", "Password456", profileForm("newPassword1"), false, "col-12")
+                        @layouts.formFields.passwordBox("newPassword2","Confirm New Password", "Password456", profileForm("newPassword2"), false, "col-12")
+                      </fieldset>
+                      <fieldset id="formValidation" class="d-flex justify-content-end mt-2">
+                        @layouts.formFields.btnSubmit("userProfileSubmit", "Save Changes")
+                        @layouts.formFields.btnReset("userProfileReset", "Undo Changes")
+                        @layouts.formFields.btnLink("Cancel", routes.ViewsController.userSelfProfile.toString)
+                      </fieldset>
                     </form>
                   </div>
                 </div>
