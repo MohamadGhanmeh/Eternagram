@@ -14,6 +14,8 @@ GET			/friend/:userId														controllers.UserController.friendRequestActio
 GET			/unfriend/:userId													controllers.UserController.unfriendRequestAction(request:Request,userId:Long)
 
 GET			/profile/																	controllers.ViewsController.userSelfProfile(request:Request)
+GET			/profile/edit																	controllers.UserController.editProfilePage(request:Request)
+
 GET			/listUsers																controllers.ViewsController.userList(request:Request)
 
 GET			/picture/view/:pictureId									controllers.PictureController.viewPicturePage(request:Request, pictureId:String)

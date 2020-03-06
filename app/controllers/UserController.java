@@ -1,6 +1,7 @@
 package controllers;
 
 import models.User;
+import models.UserProfile;
 import models.relationships.Follows;
 import models.relationships.Friends;
 import play.mvc.Http.Request;
@@ -215,5 +216,14 @@ public class UserController extends Controller {
             return redirect(routes.ViewsController.userProfile(userToRefuse.getUserName(), userToRefuse.getUserId())).flashing("success", "you are now friends with " + userToRefuse.getUserName());
         }
         return redirect(routes.ViewsController.userProfile(userToRefuse.getUserName(), userToRefuse.getUserId())).flashing("error", "you are not friends with " + userToRefuse.getUserName());
+    }
+
+    public Result editProfilePage(Request request){
+        User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
+        UserProfile profile = user.getUserProfile();
+        if(profile == null) profile = new UserProfile(user);
+        Form<UserProfile> form = formFactory.form(UserProfile.class).fill(profile);
+        DynamicForm dynamicForm = formFactory.form();
+        return ok(views.html.editProfile.render(user, form, dynamicForm, request));
     }
 }

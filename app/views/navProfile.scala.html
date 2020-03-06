@@ -15,7 +15,7 @@
                     <div class="profile-user-settings">
                         <h1 class="profile-user-name">@target.getUserName</h1>
                         @if(user.equals(target)){
-                            <button class="btn btn-outline-danger profile-edit-btn">Edit Profile</button>
+                            <a href='@routes.UserController.editProfilePage' class="btn btn-outline-danger profile-edit-btn">Edit Profile</a>
                         } else {
                             @if(Follows.find.byId(user.getUserId + ";" + target.getUserId) == null){
                                 <a class="btn btn-success profile-follow-btn" href='@routes.UserController.followUser(target.getUserId)'>Follow</a>

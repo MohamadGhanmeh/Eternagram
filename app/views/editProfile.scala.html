@@ -1,0 +1,90 @@
+@(user: User, profileForm: Form[UserProfile])(implicit form: DynamicForm, request: play.mvc.Http.Request)
+@layouts.main("Edit Profile"){<link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/editProfile.css")'> }{
+  <div class="container">
+    <div class="col">
+      <div class="row">
+        <div class="col mb-3">
+          <div class="card edit-card">
+            <div class="card-body edit-box">
+              <div class="e-profile">
+                <div class="row">
+                  <div class="col-12 col-sm-auto mb-3">
+                    <div class="mx-auto" style="width: 140px;">
+                      <div class="d-flex justify-content-center align-items-center rounded " style="height: 140px;">
+                      @layouts.formFields.pictureBox(user.getProfilePicture, "user-pic")
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                    <div class="text-center text-sm-left mb-2 mb-sm-0">
+                      <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">@user.getUserName </h4>
+                      <div class="mt-2">
+                        <button class="btn btn-danger mt-2" type="button">
+                          <i class="fa fa-fw fa-camera"></i>
+                          <span>Change Photo</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <ul class="nav nav-tabs">
+                  <li class="nav-item"></li>
+                </ul>
+                <div class="tab-content pt-3">
+                  <div class="tab-pane active">
+                    <form class="form" action="" method="post">
+                      <fieldset hidden>@helper.CSRF.formField </fieldset>
+                      <div class="row">
+                        @layouts.formFields.textBox("urlFacebook", "FaceBook Link", "http://www.facebook.com/myPage", profileForm("urlFacebook"), isRequired = false, "col-12")
+                        @layouts.formFields.textBox("urlTwitter", "Twitter Link", "http://www.twitter.com/myPage", profileForm("urlTwitter"), isRequired = false, "col-12")
+                        @layouts.formFields.textBox("urlYoutube", "Youtube Link", "http://www.youtube.com/myPage", profileForm("urlYoutube"), isRequired = false, "col-12")
+                        @layouts.formFields.textBox("urlTwitch", "Twitch Link", "http://www.twitch.com/myPage", profileForm("urlTwitch"), isRequired = false, "col-12")
+                        @layouts.formFields.textBox("urlLinkedin", "Linkedin Link", "http://www.linkedin.com/myPage", profileForm("urlLinkedin"), isRequired = false, "col-12")
+                        @layouts.formFields.textBox("urlPersonal", "Personal Link", "http://www.myPage.com", profileForm("urlPersonal"), isRequired = false, "col-12")
+                        @layouts.formFields.textArea("userBio", "My Bio", 5, 250, profileForm("userBio"), isRequired = false, "col-12")
+                      </div>
+                      <div class="row">
+                        <div class="col-12 col-sm-6 mb-3">
+                          <div class="mb-2"><b>Change Password</b></div>
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group">
+                                <label>Current Password</label>
+                                <input class="form-control" type="password" placeholder="••••••">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group">
+                                <label>New Password</label>
+                                <input class="form-control" type="password" placeholder="••••••">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group">
+                                <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
+                                <input class="form-control" type="password" placeholder="••••••"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col d-flex justify-content-end">
+                          <button class="btn btn-danger mr-2" type="submit">Save Changes</button>
+                          <button class="btn btn-secondary" type="submit">Cancel Changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
