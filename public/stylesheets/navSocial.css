@@ -1,0 +1,86 @@
+body
+{
+    font-family: sans-sarif;
+    background-color: #131419 !important;
+    color: white;
+}
+.card-user
+{
+    transform: translate(0%,0%);
+    width: 300px;
+    min-height: 345px;
+    background: #16181b;
+    box-shadow: 0 20px 50px rgba(1,2,3,.3);
+    border-radius: 10px;
+    transition: 0.5s;
+}
+.card-user:hover
+{
+    filter: brightness(125%);
+}
+.card-user-box
+{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.card-user-image
+{
+    width: 120px;
+    height: 120px;
+    margin-left: 27%;
+}
+.card-user-image-picture
+{
+    vertical-align: middle;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+}
+.card-user-title
+{
+    font-size: 20px;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 15px;
+    margin: 20px;
+}
+.card-user-links
+{
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+.card-user-li
+{   display: block;
+    color: #aaa;
+    margin: 0 10px;
+    font-size: 20px;
+    list-style: none;
+    float: left;
+    text-align: center;
+}
+.card-user-fab
+{
+    transition: 0.5s;
+}
+.card-user-fab:hover
+{
+    color: #dc3545;
+    transform: rotateY(360deg);
+}
+.text-green
+{
+    color: #2fc6b7;
+}
+.text-grey
+{
+    color: darkslategray;
+}
