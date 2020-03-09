@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Picture;
 import models.User;
 import models.UserProfile;
 import models.relationships.Follows;
@@ -82,7 +83,7 @@ public class UserController extends Controller {
         if (!isUserNameValid(userName))
             return badRequest(views.html.startPage.render(userForm.withError("userName", "That username is invalid."), true, request));
         if (!isUserPasswordValid(userPassword))
-            return badRequest(views.html.startPage.render(userForm.withError("userPassword", "That password is invalid."), true, request));
+            return badRequest(views.html.startPage.render(userForm.withError("userPassword", "That password is invalid. It must have an uppercase and a lowercase character, a number and be between 6 and 18 characters long."), true, request));
         if (!isPhoneNumberValid(phoneNumber))
             return badRequest(views.html.startPage.render(userForm.withError("phoneNumber", "That phone number is invalid."), true, request));
         if (userDOB == null)
@@ -108,7 +109,7 @@ public class UserController extends Controller {
         return redirect(routes.ViewsController.index()).withNewSession();
     }
 
-    public Result followUser(Long userId, Request request) {
+    public Result followUser(Request request, Long userId) {
         User userToFollow = User.find.byId(userId);
         User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
         DynamicForm form = formFactory.form().bindFromRequest(request);
@@ -134,7 +135,7 @@ public class UserController extends Controller {
 
     }
 
-    public Result unfollowUser(Long userId, Request request) {
+    public Result unfollowUser(Request request, Long userId) {
         User userToFollow = User.find.byId(userId);
         User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
 
@@ -218,12 +219,61 @@ public class UserController extends Controller {
         return redirect(routes.ViewsController.userProfile(userToRefuse.getUserName(), userToRefuse.getUserId())).flashing("error", "you are not friends with " + userToRefuse.getUserName());
     }
 
-    public Result editProfilePage(Request request){
+    public Result setProfilePicture(Request request, String pictureId) {
+        User user = User.findById(request.session().get("user").orElse("0"));
+        Picture picture = Picture.find.byId(pictureId);
+        if (!pictureId.equals("0") && picture == null) return redirect(routes.ViewsController.userSelfProfile()).flashing("error", "There was an error setting that picture as Profile Picture.");
+
+        UserProfile userProfile = user.getUserProfile();
+        if (userProfile==null) {
+            userProfile = new UserProfile(user);
+            userProfile.setUserProfilePicture(picture);
+            userProfile.save();
+        } else {
+            userProfile.setUserProfilePicture(picture);
+            userProfile.update();
+        }
+        return redirect(routes.ViewsController.userSelfProfile()).flashing("success", "The new profile picture has been set");
+    }
+    public Result editProfilePage(Request request) {
         User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
         UserProfile profile = user.getUserProfile();
         if(profile == null) profile = new UserProfile(user);
         Form<UserProfile> form = formFactory.form(UserProfile.class).fill(profile);
         DynamicForm dynamicForm = formFactory.form();
         return ok(views.html.editProfile.render(user, form, dynamicForm, request));
+    }
+    public Result editProfileAction(Request request) {
+        User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
+        UserProfile profile = user.getUserProfile();
+        if(profile == null) profile = new UserProfile(user);
+        Form<UserProfile> form = formFactory.form(UserProfile.class).bindFromRequest(request);
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest(request);
+        if (dynamicForm.hasErrors()) {
+            form = formFactory.form(UserProfile.class).fill(form.get());
+            return badRequest(views.html.editProfile.render(user, form, dynamicForm, request));
+        }
+        if (!user.getUserPassword().equals(dynamicForm.get("oldPassword"))) {
+            form = formFactory.form(UserProfile.class).fill(form.get());
+            return badRequest(views.html.editProfile.render(user, form.withError("oldPassword", "The password entered is invalid"), dynamicForm, request));
+        }
+
+        String newPassword = dynamicForm.get("newPassword1");
+        if (!newPassword.equals("")) {
+            if (newPassword.equals(dynamicForm.get("newPassword2"))) {
+                if(isUserPasswordValid(newPassword)){
+                    user.setUserPassword(newPassword);
+                    user.update();
+                } else {
+                    form = formFactory.form(UserProfile.class).fill(form.get());
+                    return badRequest(views.html.editProfile.render(user, form.withError("newPassword1", "That password is invalid. It must have an uppercase and a lowercase character, a number and be between 6 and 18 characters long."), dynamicForm, request));
+                }
+            } else {
+                form = formFactory.form(UserProfile.class).fill(form.get());
+                return badRequest(views.html.editProfile.render(user, form.withError("newPassword2", "The passwords don't match"), dynamicForm, request));
+            }
+        }
+        profile.updateProfile(form.get());
+        return redirect(routes.ViewsController.userSelfProfile());
     }
 }

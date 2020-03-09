@@ -64,4 +64,7 @@ public class ViewsController extends Controller {
 		DynamicForm form = formFactory.form();
 		return ok(views.html.navSocial.render(user, form, request));
 	}
+	public Result error404(Request request, String invalidString) {
+		return redirect(routes.ViewsController.index()).flashing("error","The page you have tried to access doesn't exist");
+	}
 }

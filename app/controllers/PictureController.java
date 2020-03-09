@@ -174,11 +174,12 @@ public class PictureController extends Controller {
 		}
 	}
 	public Result viewPicturePage(Request request, String pictureId){
+		User user = User.findById(request.session().get("user").orElse("0"));
 		DynamicForm commentForm = formFactory.form();
 		Picture picture = Picture.find.byId(pictureId);
 		if (picture==null) return ok(views.html.layouts.pictureModal_failure.render(commentForm, request));
 
-		return ok(views.html.layouts.pictureModal.render(picture, commentForm, request));
+		return ok(views.html.layouts.pictureModal.render(picture, user, commentForm, request));
 	}
 	public Result getPicture(Request request, String pictureId, boolean isFullSize) {
 		Picture toLoad = Picture.find.byId(pictureId);

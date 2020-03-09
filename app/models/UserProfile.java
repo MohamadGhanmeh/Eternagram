@@ -70,4 +70,27 @@ public class UserProfile extends Model {
     public void setUrlTwitter(String urlTwitter) {this.urlTwitter = urlTwitter;}
     public String getUrlPersonal() {return urlPersonal;}
     public void setUrlPersonal(String urlPersonal) {this.urlPersonal = urlPersonal;}
+
+    public void updateProfile(UserProfile newProfile) {
+        System.out.println("newProfile.urlFacebook: " + newProfile.urlFacebook);
+        System.out.println("this.urlFacebook: " + urlFacebook);
+        if (newProfile.urlFacebook.trim().equals("")) newProfile.urlFacebook = null;
+        if (newProfile.urlLinkedin.trim().equals("")) newProfile.urlLinkedin = null;
+        if (newProfile.urlPersonal.trim().equals("")) newProfile.urlPersonal = null;
+        if (newProfile.urlTwitch.trim().equals("")) newProfile.urlTwitch = null;
+        if (newProfile.urlTwitter.trim().equals("")) newProfile.urlTwitter = null;
+        if (newProfile.urlYoutube.trim().equals("")) newProfile.urlYoutube = null;
+        if (newProfile.userBio.trim().equals("")) newProfile.userBio = null;
+        urlFacebook = newProfile.urlFacebook;
+        urlLinkedin = newProfile.urlLinkedin;
+        urlPersonal = newProfile.urlPersonal;
+        urlTwitch = newProfile.urlTwitch;
+        urlTwitter = newProfile.urlTwitter;
+        urlYoutube = newProfile.urlYoutube;
+        userBio = newProfile.userBio;
+        System.out.println("After changes:");
+        System.out.println("newProfile.urlFacebook: " + newProfile.urlFacebook);
+        System.out.println("this.urlFacebook: " + urlFacebook);
+        update();
+    }
 }

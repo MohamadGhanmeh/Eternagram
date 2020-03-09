@@ -87,6 +87,14 @@ public class MappingController {
 		}
 		return answer;
 	}
+	public static SortedMap<LocalDateTime, Picture> mapPublicPictures(User target) {
+		SortedMap<LocalDateTime, Picture> answer = new TreeMap<>(Collections.reverseOrder());
+		for (Picture picture : Picture.find.query().where().startsWith("pictureId", target.getUserId() + ";").findList()) {
+			//IF user has a filter on, or privacy system is active, do the check here
+			answer.put(picture.getUploadTime(), picture);
+		}
+		return answer;
+	}
 	public static SortedMap<LocalDateTime, Picture> mapNewVisiblePictures(User user, User target, LocalDateTime lastProfileView) {
 		SortedMap<LocalDateTime, Picture> answer = new TreeMap<>(Collections.reverseOrder());
 		for (Picture picture : Picture.find.query().where().startsWith("pictureId", target.getUserId() + ";").findList()) {

@@ -38,7 +38,7 @@ body {
 	.pictureModal-dialog {min-width: 95vw; max-width: 95vw;}
 	.pictureModal-picture {width: 80vh; max-height: 80vh;}
 	.pictureModal-content {width: calc(100% - 80vh); max-height: 80vh;}
-	.pictureModal-comments {max-height: calc(80vh - 13em);}
+	.pictureModal-comments {max-height: calc(80vh - 13em); min-height: calc(80vh - 13em);}
 }
 .commentModal-title {display: flex; align-items: center;}
 .commentModal-timestamp {color: var(--color-font-grey-dark); padding: 0;margin: 0; font-size: 0.8em;}

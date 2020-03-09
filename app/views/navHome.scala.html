@@ -1,24 +1,24 @@
 @import java.time.LocalDateTime
+@import java.util
 @import models.relationships.Follows
+@import controllers.MappingController.Triplet
 @(user:User)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 
 @layouts.main("Home") {<link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/navHome.css")'>}{
-	@for(mapFollowee: (LocalDateTime, Follows) <- MappingController.mapFollowedUsers(user)) {
-		@defining(MappingController.mapNewVisiblePictures(user, mapFollowee._2.getFollowee, mapFollowee._2.getLastProfileView)) { mapFolloweePictures =>
-			@if(mapFolloweePictures.size()>0){
+	@defining(MappingController.mapHomeFeed(user)) {mapHomeFeed =>
+		@if(mapHomeFeed.size()>0) {
+			@for((feedTime: LocalDateTime, homeFeed: Triplet[User, Follows, util.SortedMap[LocalDateTime, Picture]]) <- MappingController.mapHomeFeed(user)) {
 				<card class="card feed-card">
 					<div class="card-header">
-						@layouts.formFields.pictureBox(mapFollowee._2.getFollowee.getProfilePicture, "size-60 circle feed-header mr-3")<a href='@routes.ViewsController.userProfile(mapFollowee._2.getFollowee.getUserName, mapFollowee._2.getFollowee.getUserId)'><h2 class="feed-header">@mapFollowee._2.getFollowee.getUserName</h2></a>
+						@layouts.formFields.pictureBox(homeFeed.first.getProfilePicture, "size-60 circle feed-header mr-3")<a href='@routes.ViewsController.userProfile(homeFeed.first.getUserName, homeFeed.first.getUserId)'><h2 class="feed-header">@homeFeed.first.getUserName</h2></a>
 					</div>
 					<div class="card-body">
-					@for(mapFolloweePictures: (LocalDateTime, Picture) <- MappingController.mapVisiblePictures(user, mapFollowee._2.getFollowee)) {
-						@if(mapFolloweePictures._2.getUploadTime.isAfter(mapFollowee._2.getLastProfileView)) {
-							@layouts.formFields.pictureBox(mapFolloweePictures._2, "size-150")
-						}
-					}
+					@for((pictureTime: LocalDateTime, picture: Picture) <- homeFeed.third) {@layouts.formFields.pictureBox(picture, "size-150")}
 					</div>
 				</card>
 			}
+		} else {
+			<br><h2>There are no new pictures on your feed!</h2>
 		}
 	}
 }
