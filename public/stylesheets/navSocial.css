@@ -84,3 +84,13 @@ body
 {
     color: darkslategray;
 }
+.nav-link {
+    color: #dc3545;
+}
+.nav-link:hover{
+    color: white;
+}
+.nav-pills .nav-link.active {
+    color: white;
+    background-color: #dc3545;
+}
