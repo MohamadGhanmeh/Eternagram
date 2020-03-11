@@ -74,7 +74,11 @@ public class User extends Model {
 	public Long getFollowingAmount() {return followingAmount; }
 	public void setFollowingAmount(Long followingAmount) { this.followingAmount = followingAmount; }
 
-	public UserProfile getUserProfile() {return UserProfile.find.byId(userId);}
+	public UserProfile getUserProfile() {
+		UserProfile profile = UserProfile.find.byId(userId);
+		if (profile==null) profile = new UserProfile(this);
+		return profile;
+	}
 	public boolean logIn(String password) {return password.equals(this.userPassword);}
 	public Picture getProfilePicture(){
 		UserProfile userProfile = getUserProfile();

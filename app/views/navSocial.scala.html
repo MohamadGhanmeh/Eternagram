@@ -1,3 +1,4 @@
+@import models.relationships.Friends
 @(user: User)(implicit form: DynamicForm, request: play.mvc.Http.Request)
 
 @layouts.main("Social") {<link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/navSocial.css")'>
@@ -7,22 +8,52 @@
 			<a class="nav-link active" id="pills-user-tab" data-toggle="pill" href="#pills-user" role="tab" aria-controls="pills-user" aria-selected="true">Browse Users</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="false">Received Requests</a>
+			<a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-friends" role="tab" aria-controls="pills-home" aria-selected="false">Friends List</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Friends List</a>
+			<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-sent" role="tab" aria-controls="pills-profile" aria-selected="false">Friend Requests Sent</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Your Pending Requests</a>
+			<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-received" role="tab" aria-controls="pills-contact" aria-selected="false">Friend Requests Received</a>
 		</li>
 	</ul>
 	<div class="tab-content" id="pills-tabContent">
-		<div class="tab-pane fade show active" id="pills-user" role="tabpanel" aria-labelledby="pills-user-tab">@for(map: (String, MappingController.Triplet[User, UserProfile, java.lang.Boolean]) <- MappingController.mapVisibleUsers(user)) {
-			@layouts.contentBox.userCard(map._2.first, map._2.second, map._2.third)
+		@defining(MappingController.mapSocialFeed(user)) { mapSocialFeed =>
+			<div class="tab-pane fade show active" id="pills-user" role="tabpanel" aria-labelledby="pills-user-tab">
+			@for(map: (String, MappingController.Triplet[User, UserProfile, java.lang.Boolean]) <- mapSocialFeed.first){
+				@layouts.contentBox.userCard(map._2.first, map._2.second, map._2.third)
+			}
+			</div>
+			<div class="tab-pane fade" id="pills-friends" role="tabpanel" aria-labelledby="pills-home-tab">
+			@if(mapSocialFeed.second.size()==0) {<h4>You don't have any friends yet</h4>}
+			@for(map: (String, MappingController.Triplet[User, UserProfile, Friends]) <- mapSocialFeed.second){
+				@layouts.contentBox.userCard(map._2.first, map._2.second, true)
+			}
+			</div>
+			<div class="tab-pane fade" id="pills-sent" role="tabpanel" aria-labelledby="pills-profile-tab">
+				<h2>Pending</h2>@if(mapSocialFeed.third.first.first.size()==0) {<h4>No requests pending</h4>}
+				@for(map: (String, MappingController.Triplet[User, UserProfile, Friends]) <- mapSocialFeed.third.first.first) {
+					@layouts.contentBox.userCard(map._2.first, map._2.second, true)
+				}
+				@if(mapSocialFeed.third.first.second.size()>0) {
+					<br><h2>Denied</h2>
+					@for(map: (String, MappingController.Triplet[User, UserProfile, Friends]) <- mapSocialFeed.third.first.second){
+						@layouts.contentBox.userCard(map._2.first, map._2.second, true)
+					}
+				}
+			</div>
+			<div class="tab-pane fade" id="pills-received" role="tabpanel" aria-labelledby="pills-contact-tab">
+				<h2>Pending</h2>@if(mapSocialFeed.third.second.first.size()==0) {<h4>No requests pending</h4>}
+				@for(map: (String, MappingController.Triplet[User, UserProfile, Friends]) <- mapSocialFeed.third.second.first) {
+					@layouts.contentBox.userCard(map._2.first, map._2.second, true)
+				}
+				@if(mapSocialFeed.third.second.second.size()>0) {
+					<br><h2>Denied</h2>
+					@for(map: (String, MappingController.Triplet[User, UserProfile, Friends]) <- mapSocialFeed.third.second.second){
+						@layouts.contentBox.userCard(map._2.first, map._2.second, true)
+					}
+				}
+			</div>
 		}
-		</div>
-		<div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">Consequat occaecat ullamco amet non eiusmod nostrud dolore irure incididunt est duis anim sunt officia. Fugiat velit proident aliquip nisi incididunt nostrud exercitation proident est nisi. Irure magna elit commodo anim ex veniam culpa eiusmod id nostrud sit cupidatat in veniam ad. Eiusmod consequat eu adipisicing minim anim aliquip cupidatat culpa excepteur quis. Occaecat sit eu exercitation irure Lorem incididunt nostrud.</div>
-		<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">Consequat occaecat ullamco amet non eiusmod nostrud dolore irure incididunt est duis anim sunt officia. Fugiat velit proident aliquip nisi incididunt nostrud exercitation proident est nisi. Irure magna elit commodo anim ex veniam culpa eiusmod id nostrud sit cupidatat in veniam ad. Eiusmod consequat eu adipisicing minim anim aliquip cupidatat culpa excepteur quis. Occaecat sit eu exercitation irure Lorem incididunt nostrud.</div>
-		<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">Consequat occaecat ullamco amet non eiusmod nostrud dolore irure incididunt est duis anim sunt officia. Fugiat velit proident aliquip nisi incididunt nostrud exercitation proident est nisi. Irure magna elit commodo anim ex veniam culpa eiusmod id nostrud sit cupidatat in veniam ad. Eiusmod consequat eu adipisicing minim anim aliquip cupidatat culpa excepteur quis. Occaecat sit eu exercitation irure Lorem incididunt nostrud.</div>
 	</div>
 }

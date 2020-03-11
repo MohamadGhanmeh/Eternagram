@@ -6,6 +6,8 @@ import models.Picture;
 import models.User;
 import models.UserProfile;
 import models.relationships.Follows;
+import models.relationships.Friends;
+import org.antlr.v4.runtime.misc.Triple;
 
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
@@ -24,7 +26,14 @@ public class MappingController {
 			this.second = second;
 			this.third = third;
 		}
-
+	}
+	public static class Touple<A,B> {
+		public final A first;
+		public final B second;
+		public Touple(A first, B second) {
+			this.first = first;
+			this.second = second;
+		}
 	}
 	// relationships.FOLLOWS
 
@@ -62,6 +71,40 @@ public class MappingController {
 		}
 		return answer;
 	}
+	public static Triplet<SortedMap<String, Triplet<User, UserProfile, Boolean>>, SortedMap<String, Triplet<User, UserProfile, Friends>>, Touple<Touple<SortedMap<String, Triplet<User, UserProfile, Friends>>, SortedMap<String, Triplet<User, UserProfile, Friends>>>, Touple<SortedMap<String, Triplet<User, UserProfile, Friends>>, SortedMap<String, Triplet<User, UserProfile, Friends>>>>> mapSocialFeed(User user) {
+		SortedMap<String, Triplet<User, UserProfile, Boolean>> allUsers = new TreeMap<>();
+		SortedMap<String, Triplet<User, UserProfile, Friends>> friendsAccepted = new TreeMap<>();
+		SortedMap<String, Triplet<User, UserProfile, Friends>> friendsSentPending = new TreeMap<>();
+		SortedMap<String, Triplet<User, UserProfile, Friends>> friendsSentDenied = new TreeMap<>();
+		SortedMap<String, Triplet<User, UserProfile, Friends>> friendsReceivedPending = new TreeMap<>();
+		SortedMap<String, Triplet<User, UserProfile, Friends>> friendsReceivedDenied = new TreeMap<>();
+
+		Touple<SortedMap<String, Triplet<User, UserProfile, Friends>>, SortedMap<String, Triplet<User, UserProfile, Friends>>> friendsSent = new Touple<>(friendsSentPending, friendsSentDenied);
+		Touple<SortedMap<String, Triplet<User, UserProfile, Friends>>, SortedMap<String, Triplet<User, UserProfile, Friends>>> friendsReceived = new Touple<>(friendsReceivedPending, friendsReceivedDenied);
+
+		Triplet<SortedMap<String, Triplet<User, UserProfile, Boolean>>, SortedMap<String, Triplet<User, UserProfile, Friends>>, Touple<Touple<SortedMap<String, Triplet<User, UserProfile, Friends>>, SortedMap<String, Triplet<User, UserProfile, Friends>>>, Touple<SortedMap<String, Triplet<User, UserProfile, Friends>>, SortedMap<String, Triplet<User, UserProfile, Friends>>>>> answer = new Triplet<>(allUsers, friendsAccepted, new Touple<>(friendsSent, friendsReceived));
+
+		for (User target : User.find.all()) {
+			if (target.equals(user)) continue;
+			Friends isFriend = Friends.findRequest(user, target);
+			if (isFriend==null) {
+				boolean isFollowing = Follows.find.byId(user.getUserId() + ";" + target.getUserId()) != null;
+				allUsers.put(target.getUserName(), new Triplet<>(target, target.getUserProfile(), isFollowing));
+			} else {
+				Triplet<User, UserProfile, Friends> triplet = new Triplet<>(target, target.getUserProfile(), isFriend);
+				if (isFriend.getRequestStatus()==Friends.RequestStatus.ACCEPTED) {friendsAccepted.put(target.getUserName(), triplet);
+				} else if (isFriend.getFriendReceiver().equals(user)) {
+					if (isFriend.getRequestStatus()== Friends.RequestStatus.PENDING) friendsReceived.first.put(target.getUserName(), triplet);
+					else friendsReceived.second.put(target.getUserName(), triplet);
+				} else {
+					if (isFriend.getRequestStatus()== Friends.RequestStatus.PENDING) friendsSent.first.put(target.getUserName(), triplet);
+					else friendsSent.second.put(target.getUserName(), triplet);
+				}
+			}
+		}
+		return answer;
+	}
+
 	// PICTURE
 	public static SortedMap<LocalDateTime, Triplet<User, Follows, SortedMap<LocalDateTime, Picture>>> mapHomeFeed(User user){
 		SortedMap<LocalDateTime, Triplet<User, Follows, SortedMap<LocalDateTime, Picture>>> answer = new TreeMap<>();
