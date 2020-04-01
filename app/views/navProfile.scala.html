@@ -73,9 +73,9 @@
                 @layouts.formFields.pictureBox(map._2)
                 <div class="thumbnail-clickable gallery-item-info" data-selected='@map._2.getPictureId'>
                     <ul>
-                        <!-- TODO  Number of likes
-                         <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden></i> 50</li>
-                        -->
+
+                         <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden></i> @map._2.getPictureLikes</li>
+
                         <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment"></i> @map._2.getPictureComments</li>
                     </ul>
                 </div>
