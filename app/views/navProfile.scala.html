@@ -14,41 +14,50 @@
                     </div>
                     <div class="profile-user-settings">
                         <h1 class="profile-user-name">@target.getUserName</h1>
-                        @if(user.equals(target)){
-                            <a href='@routes.UserController.editProfilePage' class="btn btn-outline-danger profile-edit-btn">Edit Profile</a>
-                        } else {
-                            @if(Follows.find.byId(user.getUserId + ";" + target.getUserId) == null){
-                                <a class="btn btn-success profile-follow-btn" href='@routes.UserController.followUser(target.getUserId)'>Follow</a>
-                            } else {
-                                <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfollowUser(target.getUserId)'>Unfollow</a>
-                                @defining(Friends.findRequest(user,target)) {friends =>
-                                    @if(friends==null) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Send Friend Request</a>} else {
-                                        @friends.getRequestStatus match {
-                                            case Friends.RequestStatus.PENDING => {
-                                                @if(friends.getFriendRequester.equals(user)) {
-                                                    <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Cancel Friend Request</a>
-                                                } else {
-                                                    <a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Accept Friend Request</a>
-                                                    <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Refuse Friend Request</a>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                User Options
+                            </button>
+                            <div class="dropdown-menu">
+                                @if(user.equals(target)){
+                                    <a class="dropdown-item whiteText" href='@routes.UserController.editProfilePage'>Edit Profile</a>
+                                } else {
+                                    @defining(Friends.findRequest(user,target)) {friends =>
+                                        @if(Follows.find.byId(user.getUserId + ";" + target.getUserId) == null){
+                                            <a class="dropdown-item whiteText" href='@routes.UserController.followUser(target.getUserId)'>Follow User</a>
+                                        } else {
+                                            @if(friends==null || !friends.getRequestStatus.equals(Friends.RequestStatus.ACCEPTED)) {<a class="dropdown-item whiteText" href='@routes.UserController.unfollowUser(target.getUserId)'>Unfollow User</a>}
+                                        }
+                                        @if(friends==null) {
+                                            <a class="dropdown-item whiteText" href='@routes.UserController.friendRequestAction(target.getUserId)'>Send a Friend Request</a>
+                                        } else {
+                                            @friends.getRequestStatus match {
+                                                case Friends.RequestStatus.PENDING => {
+                                                    @if(friends.getFriendRequester.equals(user)) {
+                                                        <a class="dropdown-item whiteText" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Cancel Friend Request</a>
+                                                    } else {
+                                                        <a class="dropdown-item whiteText" href='@routes.UserController.friendRequestAction(target.getUserId)'>Accept Friend Request</a>
+                                                        <a class="dropdown-item whiteText" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Refuse Friend Request</a>
+                                                    }
                                                 }
-                                            }
-                                            case Friends.RequestStatus.ACCEPTED => {
-                                                <a class="btn btn-danger profile-follow-btn" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Unfriend User</a>
-                                            }
-                                            case Friends.RequestStatus.DENIED => {
-                                                @if(friends.getFriendReceiver.equals(user)) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Accept Friend Request</a>}
-                                            }
-                                            case Friends.RequestStatus.UNFRIENDEDBYRECEIVER => {
-                                                @if(friends.getFriendReceiver.equals(user)) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Become Friends Again</a>}
-                                            }
-                                            case Friends.RequestStatus.UNFRIENDEDBYREQUESTER => {
-                                                @if(friends.getFriendRequester.equals(user)) {<a class="btn btn-success profile-follow-btn" href='@routes.UserController.friendRequestAction(target.getUserId)'>Become Friends Again</a>}
+                                                case Friends.RequestStatus.ACCEPTED => {
+                                                    <a class="dropdown-item whiteText" href='@routes.UserController.unfriendRequestAction(target.getUserId)'>Unfriend User</a>
+                                                }
+                                                case Friends.RequestStatus.DENIED => {
+                                                    @if(friends.getFriendReceiver.equals(user)) {<a class="dropdown-item whiteText" href='@routes.UserController.friendRequestAction(target.getUserId)'>Accept Friend Request</a>}
+                                                }
+                                                case Friends.RequestStatus.UNFRIENDEDBYRECEIVER => {
+                                                    @if(friends.getFriendReceiver.equals(user)) {<a class="dropdown-item whiteText" href='@routes.UserController.friendRequestAction(target.getUserId)'>Become Friends Again</a>}
+                                                }
+                                                case Friends.RequestStatus.UNFRIENDEDBYREQUESTER => {
+                                                    @if(friends.getFriendRequester.equals(user)) {<a class="dropdown-item whiteText" href='@routes.UserController.friendRequestAction(target.getUserId)'>Become Friends Again</a>}
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
+                            </div>
+                        </div>
                     </div>
                     <div class="profile-stats d-flex">
                         <ul class="list-inline mx-auto justify-content-center" style="width:100%">
@@ -73,9 +82,9 @@
                 @layouts.formFields.pictureBox(map._2)
                 <div class="thumbnail-clickable gallery-item-info" data-selected='@map._2.getPictureId'>
                     <ul>
-                        <!-- TODO  Number of likes
-                         <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden></i> 50</li>
-                        -->
+
+                         <li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden></i> @map._2.getPictureLikes</li>
+
                         <li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment"></i> @map._2.getPictureComments</li>
                     </ul>
                 </div>

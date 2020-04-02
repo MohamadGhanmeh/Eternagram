@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Options</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="all.css">
+    <link rel="stylesheet" type="text/css" href="UserOptions.css">
+    <script src="3.4.1.min.js"></script>
+    <script src="bootstrap.bundle.js"></script>
+    <script src="all.min.js"></script>
+    <script src="popper.min.js"></script>
+    <script src="tooltip.min.js"></script>
+</head>
+<body style="background-color: #1b141a" class="container-fluid">
+
+<div class="btn-group">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        User Options
+    </button>
+    <div class="dropdown-menu" style="background-color: black">
+        <a class="dropdown-item whiteText" href="#">Edit Profile</a>
+        <a class="dropdown-item whiteText" href="#">Follow User</a>
+        <a class="dropdown-item whiteText" href="#">Unfollow User</a>
+        <a class="dropdown-item whiteText" href="#">Friend User</a>
+        <a class="dropdown-item whiteText" href="#">Unfriend User</a>
+        <a class="dropdown-item whiteText" href="#">Hide User</a>
+        <a class="dropdown-item whiteText" href="#">Unhide User</a>
+    </div>
+</div>
+</body>
+<script>
+    $('.dropdown-toggle').dropdown()
+</script>
+</html>
