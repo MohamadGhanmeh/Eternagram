@@ -23,6 +23,8 @@ body {
 	color: white;
 	background-color: var(--color-background) !important;
 }
+.whiteText {color: #dee2e6;}
+.dropdown-menu {background-color: black;}
 .modal-content {
 	background-color: var(--color-background);
 	border-radius: 40px;
