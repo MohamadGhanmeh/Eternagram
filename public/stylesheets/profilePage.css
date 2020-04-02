@@ -77,9 +77,22 @@
     font-size: 2rem;
     margin-left: 1rem;
 }
+.profile-edit-btn, .profile-bio, .profile-stats
+{
+    grid-column: 1 / -1;
+}
 .profile-stats
 {
+    order: 1;
     margin-top: 2.3rem;
+}
+.profile-stats ul
+{
+    display: flex;
+    text-align: center;
+    padding: 1.2rem 0;
+    border-top: 0.1rem solid #dadada;
+    border-bottom: 0.1rem solid #dadada;
 }
 .profile-stats li
 {
@@ -99,10 +112,16 @@
     font-weight: 400;
     line-height: 1.5;
     margin-top: 2.3rem;
+
+
 }
 .profile-real-name, .profile-stats-count, .profile-edit-btn
 {
     font-weight: 600;
+}
+
+.profile-real-name {
+    text-align: center;
 }
 
 /*Gallery Section*/
@@ -117,7 +136,6 @@
 .gallery-item
 {
     position: relative;
-    flex: 1 0 22rem;
     margin: 1rem;
     color: #fff;
     cursor: pointer;
@@ -178,7 +196,7 @@
 }
 
 /*Meedia Query*/
-@media screen and (min-width: 40rem)
+@media screen and (min-width: 768px)
 {
     .profile
     {
@@ -241,4 +259,12 @@
         margin: 0;
 
     }
+}
+
+.row.center.profile_container {
+    justify-content: space-evenly;
+}
+
+.gallery-item.profile_images {
+    flex: 0 0 auto;
 }

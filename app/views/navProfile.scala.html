@@ -50,11 +50,11 @@
                             }
                         }
                     </div>
-                    <div class="profile-stats">
-                        <ul>
-                            <li><span class="profile-stats-count">@target.getPictureAmount</span> posts</li>
-                            <li><span class="profile-stats-count">@target.getFollowerAmount</span> followers</li>
-                            <li><span class="profile-stats-count">@target.getFollowingAmount</span> following</li>
+                    <div class="profile-stats d-flex">
+                        <ul class="list-inline mx-auto justify-content-center" style="width:100%">
+                            <li><span class="profile-stats-count list-inline-item">@target.getPictureAmount</span> posts</li>
+                            <li><span class="profile-stats-count list-inline-item">@target.getFollowerAmount</span> followers</li>
+                            <li><span class="profile-stats-count list-inline-item">@target.getFollowingAmount</span> following</li>
                         </ul>
                     </div>
                     <div class="profile-bio">
@@ -66,10 +66,10 @@
             </div>
                 <!--  END OF CONTAINER  -->
         </header>
-        <div class="row center" style="justify-content: space-between">
+        <div class="row center profile_container">
 
         @for(map:(LocalDateTime, Picture) <- controllers.MappingController.mapVisiblePictures(user , target)){
-            <div class="gallery-item" tabindex="0" style="flex: 0 0 auto">
+            <div class="gallery-item profile_images" tabindex="0" style="flex: 0 0 auto">
                 @layouts.formFields.pictureBox(map._2)
                 <div class="thumbnail-clickable gallery-item-info" data-selected='@map._2.getPictureId'>
                     <ul>
