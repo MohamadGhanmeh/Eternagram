@@ -28,20 +28,17 @@
 }
 .profile-image
 {
-    float: left;
     width: calc(33.33% - 1rem);
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     margin-right: 3rem;
 }
 .profile-image img
 {
     border-radius: 50%;
-    width: 225px;
-    height: 225px;
 }
-.profile-user-setting, .profile-stats, .profile-bio
+.profile-user-setting, .profile-bio
 {
     float: left;
     width: calc(66.666% - 2rem);
@@ -212,10 +209,6 @@
     {
         float: none;
         width: auto;
-    }
-    .profile-image img
-    {
-        width: 7.7rem;
     }
     .profile-user-settings
     {

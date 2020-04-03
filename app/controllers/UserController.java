@@ -231,7 +231,7 @@ public class UserController extends Controller {
             userProfile.save();
         } else {
             userProfile.setUserProfilePicture(picture);
-            userProfile.update();
+            userProfile.save();
         }
         return redirect(routes.ViewsController.userSelfProfile()).flashing("success", "The new profile picture has been set");
     }
@@ -246,7 +246,10 @@ public class UserController extends Controller {
     public Result editProfileAction(Request request) {
         User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
         UserProfile profile = user.getUserProfile();
-        if(profile == null) profile = new UserProfile(user);
+        if(profile == null) {
+            profile = new UserProfile(user);
+            profile.save();
+        }
         Form<UserProfile> form = formFactory.form(UserProfile.class).bindFromRequest(request);
         DynamicForm dynamicForm = formFactory.form().bindFromRequest(request);
         if (dynamicForm.hasErrors()) {
@@ -257,7 +260,6 @@ public class UserController extends Controller {
             form = formFactory.form(UserProfile.class).fill(form.get());
             return badRequest(views.html.editProfile.render(user, form.withError("oldPassword", "The password entered is invalid"), dynamicForm, request));
         }
-
         String newPassword = dynamicForm.get("newPassword1");
         if (!newPassword.equals("")) {
             if (newPassword.equals(dynamicForm.get("newPassword2"))) {

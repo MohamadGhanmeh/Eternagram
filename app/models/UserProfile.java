@@ -91,6 +91,6 @@ public class UserProfile extends Model {
         System.out.println("After changes:");
         System.out.println("newProfile.urlFacebook: " + newProfile.urlFacebook);
         System.out.println("this.urlFacebook: " + urlFacebook);
-        update();
+        this.save();
     }
 }
