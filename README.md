@@ -15,7 +15,7 @@ Backend:<ul><li>Java</li><li>Scala</li><li>Play Framework</li><li>SQL</li><li>Eb
 Frontend:<ul><li>HTML 5.0</li><li>CSS</li><li>JavaScript</li></ul>
 
 # Features
-Core features to be implemented:
+Core features:
 <ul><li>Registering a user account</li>
 <li>Posting a picture</li>
 <li>Following a user</li>
