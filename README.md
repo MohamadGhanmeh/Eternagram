@@ -19,10 +19,16 @@ Core features to be implemented:
 <ul><li>Registering a user account</li>
 <li>Posting a picture</li>
 <li>Following a user</li>
-<li>Leave comments to a posted picture</li>
-<li>Implement Homepage</li></ul>
+<li>Leave comments to a posted picture</li></ul>
 
-Planed features:
+
+Added features:
+<ul><li>Implement Homepage</li>
+<li>Implement Social Page</li>
+<li>Friend System</li>
+<li>Implement Notification System for Homepage</li></ul>
+
+Future possible implementations:
 <ul><li>Delete comments</li>
 <li>Edit comments</li>
 <li>Delete pictures</li>
@@ -30,7 +36,6 @@ Planed features:
 <li>Class pictures in albums</li>
 <li>"Like" pictures</li>
 <li>Filter pictures</li>
-<li>Friend system</li>
 <li>Group system</li>
 <li>Privacy system</li>
 <li>Messaging between friends</li>
