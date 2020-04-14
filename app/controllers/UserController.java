@@ -17,6 +17,7 @@ import play.mvc.Result;
 
 import play.mvc.Http.Request;
 import play.mvc.Result;
+import play.mvc.Security;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -70,6 +71,7 @@ public class UserController extends Controller {
         return (User.find.query().where().eq("phoneNumber", toCheck) != null);
     }
 
+    @Security.Authenticated(UserAuthenticator.class)
     public Result newUserAction(Request request) {
         DynamicForm userForm = formFactory.form().bindFromRequest(request);
         String userEmail = userForm.get("userEmail");
@@ -104,11 +106,13 @@ public class UserController extends Controller {
         return redirect(routes.ViewsController.index()).withSession(SessionController.loginUser(toLogin.getUserId()));
     }
 
+    @Security.Authenticated(UserAuthenticator.class)
     public Result logOut(Request request) {
         SessionController.logoutUser(request.session().get("user").orElse("0"));
         return redirect(routes.ViewsController.index()).withNewSession();
     }
 
+    @Security.Authenticated(UserAuthenticator.class)
     public Result followUser(Request request, Long userId) {
         User userToFollow = User.find.byId(userId);
         User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
@@ -135,6 +139,7 @@ public class UserController extends Controller {
 
     }
 
+    @Security.Authenticated(UserAuthenticator.class)
     public Result unfollowUser(Request request, Long userId) {
         User userToFollow = User.find.byId(userId);
         User userThatFollows = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
@@ -160,6 +165,7 @@ public class UserController extends Controller {
 
     }
 
+    @Security.Authenticated(UserAuthenticator.class)
     public Result friendRequestAction(Request request, Long userId) {
         User userToAdd = User.find.byId(userId);
         User userThatRequests = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
@@ -189,6 +195,7 @@ public class UserController extends Controller {
         toAdd.save();
         return redirect(routes.ViewsController.userProfile(userToAdd.getUserName(), userToAdd.getUserId())).flashing("success", "your friend request was sent to " + userToAdd.getUserName());
     }
+    @Security.Authenticated(UserAuthenticator.class)
     public Result unfriendRequestAction(Request request, Long userId) {
         User userToRefuse = User.find.byId(userId);
         User userThatRequests = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
@@ -219,6 +226,7 @@ public class UserController extends Controller {
         return redirect(routes.ViewsController.userProfile(userToRefuse.getUserName(), userToRefuse.getUserId())).flashing("error", "you are not friends with " + userToRefuse.getUserName());
     }
 
+    @Security.Authenticated(UserAuthenticator.class)
     public Result setProfilePicture(Request request, String pictureId) {
         User user = User.findById(request.session().get("user").orElse("0"));
         Picture picture = Picture.find.byId(pictureId);
@@ -235,6 +243,7 @@ public class UserController extends Controller {
         }
         return redirect(routes.ViewsController.userSelfProfile()).flashing("success", "The new profile picture has been set");
     }
+    @Security.Authenticated(UserAuthenticator.class)
     public Result editProfilePage(Request request) {
         User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
         UserProfile profile = user.getUserProfile();
@@ -243,6 +252,7 @@ public class UserController extends Controller {
         DynamicForm dynamicForm = formFactory.form();
         return ok(views.html.editProfile.render(user, form, dynamicForm, request));
     }
+    @Security.Authenticated(UserAuthenticator.class)
     public Result editProfileAction(Request request) {
         User user = User.find.byId(Long.parseLong(request.session().get("user").orElse("0")));
         UserProfile profile = user.getUserProfile();

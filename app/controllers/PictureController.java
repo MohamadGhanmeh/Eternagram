@@ -15,6 +15,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Http.Request;
 import play.mvc.Result;
+import play.mvc.Security;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -111,10 +112,12 @@ public class PictureController extends Controller {
 	}
 	private String getPictureLocation(Picture picture){ return fileDirectory + "/" + picture.getPictureOwner().getUserId();}
 
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result newPicturePage(Request request){
 		DynamicForm pictureForm = formFactory.form();
 		return ok(views.html.navUpload.render(pictureForm, request));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result newPictureAction(Request request) {
 		DynamicForm pictureForm = formFactory.form().bindFromRequest(request);
 		String pictureCaption = pictureForm.get("pictureCaption").trim();
@@ -149,6 +152,7 @@ public class PictureController extends Controller {
 			return badRequest().flashing("error", "Missing file");
 		}
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public void newPictureThumbnail(Picture uploadedPicture) {
 		String fileExtension = uploadedPicture.getFileExtension();
 		String pictureId = uploadedPicture.getPictureId();
@@ -173,6 +177,7 @@ public class PictureController extends Controller {
 			e.printStackTrace();
 		}
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result viewPicturePage(Request request, String pictureId){
 		User user = User.findById(request.session().get("user").orElse("0"));
 		DynamicForm commentForm = formFactory.form();
@@ -181,6 +186,7 @@ public class PictureController extends Controller {
 
 		return ok(views.html.layouts.pictureModal.render(picture, user, commentForm, request));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result getPicture(Request request, String pictureId, boolean isFullSize) {
 		Picture toLoad = Picture.find.byId(pictureId);
 		if (toLoad == null) return ok(new File(fileDirectory + "/Default.jpg"), Optional.of("Default.jpg"));
@@ -191,6 +197,7 @@ public class PictureController extends Controller {
 		return ok(new File(pictureAddress + "/" + pictureId + pictureExtension), Optional.of(pictureName));
 	}
 
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result newCommentAction(Request request, String pictureId){
 		DynamicForm commentForm = formFactory.form().bindFromRequest(request);
 		String commentContent = commentForm.get("commentContent");
@@ -205,6 +212,7 @@ public class PictureController extends Controller {
 		picture.addCommentToPicture(newComment);
 		return ok(); // TODO we have to complete the picture/comment page first
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result deleteCommentAction(Request request, String commentId){
 		Comment toDelete = Comment.find.byId(commentId);
 
@@ -214,11 +222,13 @@ public class PictureController extends Controller {
 		commentedPicture.removeCommentFromPicture(toDelete);
 		return redirect(""); // TODO we have to complete the picture/comment page first
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result getPictureComments(Request request, String pictureId) {
 		Picture picture = Picture.find.byId(pictureId);
 		if (picture==null) return ok();
 		return ok(views.html.layouts.contentBox.comments.render(picture));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result tagPictureAction(Request request, long tagId, String pictureId){
 		Picture taggedPicture = Picture.find.byId(pictureId);
 		Tag tagOfPicture = Tag.find.byId(tagId);
@@ -231,6 +241,7 @@ public class PictureController extends Controller {
 		return ok();
 	}
 
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result untagPictureAction(Request request, long tagId, String pictureId){
 		Picture taggedPicture = Picture.find.byId(pictureId);
 		Tag tagOfPicture = Tag.find.byId(tagId);
@@ -243,6 +254,7 @@ public class PictureController extends Controller {
 		return ok();
 	}
 
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result likePictureAction(Request request, String pictureId) {
 		User liker = User.findById(request.session().get("user").orElse("0"));
 		Picture liked = Picture.find.byId(pictureId);
@@ -255,6 +267,7 @@ public class PictureController extends Controller {
 		liked.update();
 		return ok();    // TODO we have to complete the picture/comment page
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result unlikePictureAction(Request request, String pictureId) {
 		User liker = User.findById(request.session().get("user").orElse("0"));
 		Picture liked = Picture.find.byId(pictureId);

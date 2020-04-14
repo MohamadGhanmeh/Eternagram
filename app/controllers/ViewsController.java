@@ -6,10 +6,9 @@ import models.relationships.Follows;
 import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Http.Request;
 import play.mvc.Result;
-import play.routing.JavaScriptReverseRouter;
+import play.mvc.Security;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,16 +31,19 @@ public class ViewsController extends Controller {
 		if (user == null) {return ok(views.html.startPage.render(form, false, request));}
 		return ok(views.html.navHome.render(user, form, request));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result userList(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
 		DynamicForm form = formFactory.form();
 		return ok(views.html.navUsers.render(user, form, request));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result userSelfProfile(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
 		if (user == null) return redirect(routes.ViewsController.index());
 		return redirect(routes.ViewsController.userProfile(user.getUserName(), user.getUserId()));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result userProfile(Request request, String userName, Long userId){
 		User user = User.findById(request.session().get("user").orElse("0"));
 		User target = User.find.byId(userId);
@@ -59,6 +61,7 @@ public class ViewsController extends Controller {
 		if(userProfile == null) userProfile = new UserProfile(target);
 		return ok(views.html.navProfile.render(user, target, userProfile, form, request));
 	}
+	@Security.Authenticated(UserAuthenticator.class)
 	public Result socialPage(Request request) {
 		User user = User.findById(request.session().get("user").orElse("0"));
 		DynamicForm form = formFactory.form();
